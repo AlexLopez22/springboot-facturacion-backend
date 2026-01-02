@@ -1,17 +1,27 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.repositories;
 
-import java.util.Optional;
-import org.springframework.data.jpa.repository.EntityGraph;
+import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Invoice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
+import org.springframework.data.jpa.repository.EntityGraph;
 
-import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Invoice;
+import java.util.List;
+import java.util.Optional;
+
 
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
-
-    // Sobrescribimos findById para que cargue detalles  y cuotas con EntityGraph
+    
     @Override
-    @EntityGraph(attributePaths = {"detalles", "cuotas"})
+    @EntityGraph(attributePaths = {"items", "totales", "cliente", "emisor", "formaPago"})
+    @NonNull
+    List<Invoice> findAll();
+    
+    @Override
+    @EntityGraph(attributePaths = {"items", "totales", "cliente", "emisor", "formaPago"})
     @NonNull
     Optional<Invoice> findById(@NonNull Long id);
+
+
+
+    
 }

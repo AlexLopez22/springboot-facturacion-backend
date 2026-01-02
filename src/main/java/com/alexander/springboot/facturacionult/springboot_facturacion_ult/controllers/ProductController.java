@@ -10,7 +10,7 @@ import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entiti
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.services.ProductService;
 
 @RestController
-@RequestMapping("/productos")
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -19,21 +19,20 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping
-    public List<Product> listProduct() {
-        return productService.listProduct();
+    @GetMapping("/list-product")
+    public ResponseEntity<List<ProductDTO>> listProduct() {
+        return ResponseEntity.ok(productService.listProduct());
     }
 
-    @PostMapping
-    public Product createProduct(@RequestBody Product producto) {
-        return productService.saveProduct(producto);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        ProductDTO dto = productService.getProductById(id);
+    @GetMapping("/list-product/{id}")
+    public ResponseEntity<ProductDTO> listProductById(@PathVariable Long id) {
+        ProductDTO dto = productService.listProductById(id);
         return ResponseEntity.ok(dto);
     }
-    
 
+    @PostMapping("/create-product")
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        Product saved = productService.createProduct(product);
+        return ResponseEntity.ok(saved);
+    }
 }

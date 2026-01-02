@@ -16,24 +16,39 @@ public class ProductService {
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-
-    public List<Product> listProduct() {
-        return productRepository.findAll();
+    private ProductDTO mapToDTO(Product product) {
+        ProductDTO dto = new ProductDTO();
+        dto.setId(product.getId());
+        dto.setCodigo(product.getCodigo());
+        dto.setDescripcion(product.getDescripcion());
+        dto.setUnidadMedida(product.getUnidadMedida());
+        dto.setAfectacionIgv(product.getAfectacionIgv());
+        dto.setEstado(product.getEstado());
+        return dto;
     }
 
-    public Product saveProduct(Product producto) {
-        return productRepository.save(producto);
+    public List<ProductDTO> listProduct() {
+        return productRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .toList();
     }
-
-    public ProductDTO getProductById(Long id) {
+        
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
+    }
+    
+    public ProductDTO listProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado id: " + id));
 
         ProductDTO dto = new ProductDTO();
         dto.setId(product.getId());
         dto.setCodigo(product.getCodigo());
         dto.setDescripcion(product.getDescripcion());
+        dto.setUnidadMedida(product.getUnidadMedida());
+        dto.setAfectacionIgv(product.getAfectacionIgv());
+        dto.setEstado(product.getEstado());
+
         return dto;
     }
-    
 }

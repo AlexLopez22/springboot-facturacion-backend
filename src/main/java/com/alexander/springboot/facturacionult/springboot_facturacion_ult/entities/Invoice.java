@@ -1,71 +1,68 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Table(name = "facturas")
+@Table(name = "comprobantes")
 public class Invoice {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fecha_emision", nullable = false)
-    private LocalDateTime fechaEmision;
+    @Column(name = "tipo_comprobante")
+    private String tipoComprobante;
 
-    @Column(name = "fecha_registro", nullable = false)
-    private LocalDateTime fechaRegistro;
-
-    @Column(name = "cliente_id", nullable = false)
-    private Long clienteId;
-
-    @Column(name = "condicion_pago", nullable = false)
-    private String condicionPago; 
-
-    @Column(name = "tipo_documento", nullable = false)
-    private String tipoDocumento;
-
-    @Column(name = "moneda", nullable = false)
-    private String moneda;
-
-    @Column(name = "tipo_operacion", nullable = false)
-    private String tipoOperacion;
-
-    @Column(name = "serie", nullable = false)
+    @Column(name = "serie")
     private String serie;
 
-    @Column(name = "correlativo", nullable = false)
-    private Integer correlativo;
+    @Column(name = "numero")
+    private String numero;
 
-    @Column(name = "sub_total", nullable = false)
-    private Double subtotal;
+    @Column(name = "fecha_emision")
+    private LocalDate fechaEmision;
 
-    @Column(name = "igv_total", nullable = false)
-    private Double igvTotal;
-
-    @Column(name = "total", nullable = false)
-    private Double total;
-
-    @Column(name = "tipo_cambio")
-    private Double tipoCambio;
-
-    @Column(name = "estado", nullable = false)
-    private String estado;
-
-    @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion;
-
-    @Column(name = "fecha_actualizacion", nullable = false)
-    private LocalDateTime fechaActualizacion;
- 
-    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<InvoiceDetail> detalles;
+    @Column(name = "hora_emision")
+    private LocalTime horaEmision;
     
+    @Column(name = "moneda")
+    private String moneda;
 
-    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Installment> cuotas;
+    @Column(name = "tipo_operacion")
+    private String tipoOperacion;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Client cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "emisor_id", nullable = false)
+    private Issuer emisor;
+
+    @ManyToOne
+    @JoinColumn(name = "forma_pago_id")
+    private PaymentMethod formaPago;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    private List<InvoiceDetail> items;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "totales_id")
+    private Totales totales;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    private List<Tax> impuestos;
+ 
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    private List<Legend> leyendas;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sunat_id")
+    private Sunat sunat;
 
     public Long getId() {
         return id;
@@ -75,148 +72,126 @@ public class Invoice {
         this.id = id;
     }
 
-    public LocalDateTime getFechaEmision() {
-        return fechaEmision;
+    public String getTipoComprobante() {
+        return tipoComprobante;
     }
 
-    public void setFechaEmision(LocalDateTime issueDate) {
-        this.fechaEmision = issueDate;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(LocalDateTime registerDate) {
-        this.fechaRegistro = registerDate;
-    }
-
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(Long clientId) {
-        this.clienteId = clientId;
-    }
-
-    public String getCondicionPago() {
-        return condicionPago;
-    }
-
-    public void setCondicionPago(String paymentCondition) {
-        this.condicionPago = paymentCondition;
-    }
-
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(String documentType) {
-        this.tipoDocumento = documentType;
-    }
-
-    public String getMoneda() {
-        return moneda;
-    }
-
-    public void setMoneda(String currency) {
-        this.moneda = currency;
-    }
-
-    public String getTipoOperacion() {
-        return tipoOperacion;
-    }
-
-    public void setTipoOperacion(String operationType) {
-        this.tipoOperacion = operationType;
+    public void setTipoComprobante(String tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
     }
 
     public String getSerie() {
         return serie;
     }
 
-    public void setSerie(String series) {
-        this.serie = series;
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
 
-    public Integer getCorrelativo() {
-        return correlativo;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setCorrelativo(Integer correlative) {
-        this.correlativo = correlative;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
-    public Double getSubtotal() {
-        return subtotal;
+    public LocalDate getFechaEmision() {
+        return fechaEmision;
     }
 
-    public void setSubtotal(Double subtotal) {
-        this.subtotal = subtotal;
+    public void setFechaEmision(LocalDate fechaEmision) {
+        this.fechaEmision = fechaEmision;
     }
 
-    public Double getIgvTotal() {
-        return igvTotal;
+    public LocalTime getHoraEmision() {
+        return horaEmision;
     }
 
-    public void setIgvTotal(Double igvTotal) {
-        this.igvTotal = igvTotal;
+    public void setHoraEmision(LocalTime horaEmision) {
+        this.horaEmision = horaEmision;
     }
 
-    public Double getTotal() {
-        return total;
+    public String getMoneda() {
+        return moneda;
     }
 
-    public void setTotal(Double total) {
-        this.total = total;
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
 
-    public Double getTipoCambio() {
-        return tipoCambio;
+    public String getTipoOperacion() {
+        return tipoOperacion;
     }
 
-    public void setTipoCambio(Double exchangeRate) {
-        this.tipoCambio = exchangeRate;
+    public void setTipoOperacion(String tipoOperacion) {
+        this.tipoOperacion = tipoOperacion;
     }
 
-    public String getEstado() {
-        return estado;
+    public Client getCliente() {
+        return cliente;
     }
 
-    public void setEstado(String status) {
-        this.estado = status;
+    public void setCliente(Client cliente) {
+        this.cliente = cliente;
     }
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public Issuer getEmisor() {
+        return emisor;
     }
 
-    public void setFechaCreacion(LocalDateTime createdAt) {
-        this.fechaCreacion = createdAt;
+    public void setEmisor(Issuer emisor) {
+        this.emisor = emisor;
     }
 
-    public LocalDateTime getFechaActualizacion() {
-        return fechaActualizacion;
+    public PaymentMethod getFormaPago() {
+        return formaPago;
     }
 
-    public void setFechaActualizacion(LocalDateTime updatedAt) {
-        this.fechaActualizacion = updatedAt;
+    public void setFormaPago(PaymentMethod formaPago) {
+        this.formaPago = formaPago;
     }
 
-    public List<InvoiceDetail> getDetalles() {
-        return detalles;
+    public List<InvoiceDetail> getItems() {
+        return items;
     }
 
-    public void setDetalles(List<InvoiceDetail> detalles) {
-        this.detalles = detalles;
+    public void setItems(List<InvoiceDetail> items) {
+        this.items = items;
     }
 
-    public List<Installment> getCuotas() {
-        return cuotas;
+    public Totales getTotales() {
+        return totales;
     }
 
-    public void setCuotas(List<Installment> cuotas) {
-        this.cuotas = cuotas;
+    public void setTotales(Totales totales) {
+        this.totales = totales;
     }
+
+    public List<Tax> getImpuestos() {
+        return impuestos;
+    }
+
+    public void setImpuestos(List<Tax> impuestos) {
+        this.impuestos = impuestos;
+    }
+
+    public List<Legend> getLeyendas() {
+        return leyendas;
+    }
+
+    public void setLeyendas(List<Legend> leyendas) {
+        this.leyendas = leyendas;
+    }
+
+    public Sunat getSunat() {
+        return sunat;
+    }
+
+    public void setSunat(Sunat sunat) {
+        this.sunat = sunat;
+    }
+
+
 
 }

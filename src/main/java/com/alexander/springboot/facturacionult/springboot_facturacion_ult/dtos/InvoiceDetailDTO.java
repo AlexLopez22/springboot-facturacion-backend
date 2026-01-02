@@ -1,49 +1,94 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
-public class InvoiceDetailDTO {
-    
-    private Long productoId;
-    private Integer cantidad;
-    private Double precioUnitario;
-    private Double valorVenta;
-    private Double igv;
-    private Double totalLinea;
+import java.math.BigDecimal;
 
+public class InvoiceDetailDTO {
+
+    private Long id;
+    private Long productoId;
+    private String codigoProducto;
+    private String descripcion;
+    private BigDecimal cantidad;
+    private BigDecimal precioUnitario;
+    private BigDecimal valorUnitario;
+    private BigDecimal valorVenta;
+    private String afectacionIgv;
+    private BigDecimal importeTotal;
+    private String unidadMedida;
+    private Integer item;
+
+    
+    public Long getId() {
+        return id;
+    }
+    public String getCodigoProducto() {
+        return codigoProducto;
+    }
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+    public String getUnidadMedida() {
+        return unidadMedida;
+    }
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
     public Long getProductoId() {
         return productoId;
     }
-    public void setProductoId(Long productId) {
-        this.productoId = productId;
+    public void setProductoId(Long productoId) {
+        this.productoId = productoId;
     }
-    public Integer getCantidad() {
+    public String getDescripcion() {
+        return descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    public BigDecimal getCantidad() {
         return cantidad;
     }
-    public void setCantidad(Integer quantity) {
-        this.cantidad = quantity;
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
     }
-    public Double getPrecioUnitario() {
+    public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
-    public void setPrecioUnitario(Double unitPrice) {
-        this.precioUnitario = unitPrice;
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
-    public Double getValorVenta() {
+    public BigDecimal getValorUnitario() {
+        return valorUnitario;
+    }
+    public void setValorUnitario(BigDecimal valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+    public BigDecimal getValorVenta() {
         return valorVenta;
     }
-    public void setValorVenta(Double saleValue) {
-        this.valorVenta = saleValue;
+    public void setValorVenta(BigDecimal valorVenta) {
+        this.valorVenta = valorVenta;
     }
-    public Double getIgv() {
-        return igv;
+    public String getAfectacionIgv() {
+        return afectacionIgv;
     }
-    public void setIgv(Double igv) {
-        this.igv = igv;
+    public void setAfectacionIgv(String afectacionIgv) {
+        this.afectacionIgv = afectacionIgv;
     }
-    public Double getTotalLinea() {
-        return totalLinea;
+    public BigDecimal getImporteTotal() {
+        return importeTotal;
     }
-    public void setTotalLinea(Double lineTotal) {
-        this.totalLinea = lineTotal;
+    public void setImporteTotal(BigDecimal importeTotal) {
+        this.importeTotal = importeTotal;
+    }
+    public Integer getItem() {
+        return item;
+    }
+    public void setItem(Integer item) {
+        this.item = item;
     }
 
 }

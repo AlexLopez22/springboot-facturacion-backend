@@ -1,76 +1,83 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities;
 
+import java.util.List;
+
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clientes")
 public class Client {
+    
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+    
+        @Column(name = "tipo_documento", nullable = false)
+        private String tipoDocumento;
+    
+        @Column(name = "numero_documento", nullable = false)
+        private String numeroDocumento;
+    
+        @Column(name = "razon_social", nullable = false)
+        private String razonSocial;
+    
+        @Embedded 
+        @AttributeOverrides({ @AttributeOverride(name = "direccionCompleta", column = @Column(name = "direccion_completa")) }) 
+        private Address direccion; 
+    
+        // Relación con facturas
+        @OneToMany(mappedBy = "cliente")
+        private List<Invoice> invoices;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+        public Long getId() {
+            return id;
+        }
 
-    @Column(name = "ruc")
-    private String ruc;
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-    @Column(name = "dni")
-    private String dni;
+        public String getTipoDocumento() {
+            return tipoDocumento;
+        }
 
-    @Column(name = "nombre_razon_social", nullable = false)
-    private String nombreRazonSocial;
+        public void setTipoDocumento(String tipoDocumento) {
+            this.tipoDocumento = tipoDocumento;
+        }
 
-    @Column(name = "direccion")
-    private String direccion;
+        public String getNumeroDocumento() {
+            return numeroDocumento;
+        }
 
-    @Column(name = "celular")
-    private String celular;
+        public void setNumeroDocumento(String numeroDocumento) {
+            this.numeroDocumento = numeroDocumento;
+        }
 
-    public Integer getId() {
-        return id;
-    }
+        public String getRazonSocial() {
+            return razonSocial;
+        }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+        public void setRazonSocial(String razonSocial) {
+            this.razonSocial = razonSocial;
+        }
 
-    public String getRuc() {
-        return ruc;
-    }
+        public Address getDireccion() {
+            return direccion;
+        }
 
-    public void setRuc(String ruc) {
-        this.ruc = ruc;
-    }
+        public void setDireccion(Address direccion) {
+            this.direccion = direccion;
+        }
 
-    public String getDni() {
-        return dni;
-    }
+        public List<Invoice> getInvoices() {
+            return invoices;
+        }
 
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
+        public void setInvoices(List<Invoice> invoices) {
+            this.invoices = invoices;
+        }
 
-    public String getNombreRazonSocial() {
-        return nombreRazonSocial;
-    }
-
-    public void setNombreRazonSocial(String nombreRazonSocial) {
-        this.nombreRazonSocial = nombreRazonSocial;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getCelular() {
-        return celular;
-    }
-
-    public void setCelular(String celular) {
-        this.celular = celular;
-    }
+   
 
 }

@@ -1,143 +1,101 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class InvoiceFullDTO {
     private Long id;
-    private LocalDateTime fechaEmision;
-    private LocalDateTime fechaRegistro;
-    private Long clienteId;
-    private String condicionPago;
-    private String tipoDocumento;
+    private String tipoComprobante;
+    private String serie;
+    private String numero;
     private String moneda;
     private String tipoOperacion;
-    private String serie;
-    private Integer correlativo;
-    private Double subtotal;
-    private Double igvTotal;
-    private Double total;
-    private Double tipoCambio;
-    private String estado;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaActualiacion;
+    private String fechaEmision;
+    private String horaEmision;
 
-    private List<InvoiceDetailDTO> detalles;
-    private List<InstallmentDTO> cuotas;
-    
+    private ClientDTO client;
+    private IssuerDTO issuer;
+    private PaymentMethodDTO paymentMethod;
+
+    private List<InvoiceDetailDTO> items;
+    private TotalesDTO totales;
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
-    public LocalDateTime getFechaEmision() {
-        return fechaEmision;
+    public String getTipoComprobante() {
+        return tipoComprobante;
     }
-    public void setFechaEmision(LocalDateTime issueDate) {
-        this.fechaEmision = issueDate;
-    }
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-    public void setFechaRegistro(LocalDateTime registerDate) {
-        this.fechaRegistro = registerDate;
-    }
-    public Long getClienteId() {
-        return clienteId;
-    }
-    public void setClienteId(Long clientId) {
-        this.clienteId = clientId;
-    }
-    public String getCondicionPago() {
-        return condicionPago;
-    }
-    public void setCondicionPago(String paymentCondition) {
-        this.condicionPago = paymentCondition;
-    }
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
-    public void setTipoDocumento(String documentType) {
-        this.tipoDocumento = documentType;
-    }
-    public String getMoneda() {
-        return moneda;
-    }
-    public void setMoneda(String currency) {
-        this.moneda = currency;
-    }
-    public String getTipoOperacion() {
-        return tipoOperacion;
-    }
-    public void setTipoOperacion(String operationType) {
-        this.tipoOperacion = operationType;
+    public void setTipoComprobante(String tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
     }
     public String getSerie() {
         return serie;
     }
-    public void setSerie(String series) {
-        this.serie = series;
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
-    public Integer getCorrelativo() {
-        return correlativo;
+    public String getNumero() {
+        return numero;
     }
-    public void setCorrelativo(Integer correlative) {
-        this.correlativo = correlative;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
-    public Double getSubtotal() {
-        return subtotal;
+    public String getMoneda() {
+        return moneda;
     }
-    public void setSubtotal(Double subtotal) {
-        this.subtotal = subtotal;
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
-    public Double getIgvTotal() {
-        return igvTotal;
+    public String getTipoOperacion() {
+        return tipoOperacion;
     }
-    public void setIgvTotal(Double igvTotal) {
-        this.igvTotal = igvTotal;
+    public void setTipoOperacion(String tipoOperacion) {
+        this.tipoOperacion = tipoOperacion;
     }
-    public Double getTotal() {
-        return total;
+    public String getFechaEmision() {
+        return fechaEmision;
     }
-    public void setTotal(Double total) {
-        this.total = total;
+    public void setFechaEmision(String fechaEmision) {
+        this.fechaEmision = fechaEmision;
     }
-    public Double getTipoCambio() {
-        return tipoCambio;
+    public String getHoraEmision() {
+        return horaEmision;
     }
-    public void setTipoCambio(Double exchangeRate) {
-        this.tipoCambio = exchangeRate;
+    public void setHoraEmision(String horaEmision) {
+        this.horaEmision = horaEmision;
     }
-    public String getEstado() {
-        return estado;
+    public ClientDTO getClient() {
+        return client;
     }
-    public void setEstado(String status) {
-        this.estado = status;
+    public void setClient(ClientDTO client) {
+        this.client = client;
     }
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public IssuerDTO getIssuer() {
+        return issuer;
     }
-    public void setFechaCreacion(LocalDateTime createdAt) {
-        this.fechaCreacion = createdAt;
+    public void setIssuer(IssuerDTO issuer) {
+        this.issuer = issuer;
     }
-    public LocalDateTime getFechaActualiacion() {
-        return fechaActualiacion;
+    public PaymentMethodDTO getPaymentMethod() {
+        return paymentMethod;
     }
-    public void setFechaActualiacion(LocalDateTime updatedAt) {
-        this.fechaActualiacion = updatedAt;
+    public void setPaymentMethod(PaymentMethodDTO paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
-    public List<InvoiceDetailDTO> getDetalles() {
-        return detalles;
+    public List<InvoiceDetailDTO> getItems() {
+        return items;
     }
-    public void setDetalles(List<InvoiceDetailDTO> details) {
-        this.detalles = details;
+    public void setItems(List<InvoiceDetailDTO> items) {
+        this.items = items;
     }
-    public List<InstallmentDTO> getCuotas() {
-        return cuotas;
+    public TotalesDTO getTotales() {
+        return totales;
     }
-    public void setCuotas(List<InstallmentDTO> installments) {
-        this.cuotas = installments;
+    public void setTotales(TotalesDTO totales) {
+        this.totales = totales;
     }
 
+        
 }

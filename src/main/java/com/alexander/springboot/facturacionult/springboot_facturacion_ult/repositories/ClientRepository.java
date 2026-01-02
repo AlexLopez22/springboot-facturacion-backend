@@ -3,9 +3,8 @@ package com.alexander.springboot.facturacionult.springboot_facturacion_ult.repos
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClientRepository extends JpaRepository<Client, Integer> {
-   
-    // Buscar por RUC o DNI
-    Client findByRuc(String ruc);
-    Client findByDni(String dni);
+import java.util.Optional;
+
+public interface ClientRepository extends JpaRepository<Client, Long> {
+    Optional<Client> findByNumeroDocumento(String numeroDocumento);
 }

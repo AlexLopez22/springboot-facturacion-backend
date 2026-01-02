@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.InvoiceDTO;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.InvoiceFullDTO;
-import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Invoice;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.services.InvoiceService;
 
 @RestController
@@ -20,19 +19,19 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @GetMapping
-    public List<InvoiceDTO> listInvoices() {
-        return invoiceService.listInvoices();
-    }
-    // Detalle completo de una factura
-    @GetMapping("/{id}")
-    public InvoiceFullDTO getInvoice(@PathVariable Long id) {
-        return invoiceService.getInvoiceById(id);
+    @GetMapping("/list-invoices")
+    public ResponseEntity<List<InvoiceDTO>> listInvoices() {
+        return ResponseEntity.ok(invoiceService.listInvoices());
     }
 
-    @PostMapping
-    public ResponseEntity<String> createInvoice(@RequestBody Invoice invoice) {
-        Invoice saved = invoiceService.createInvoice(invoice);
-        return ResponseEntity.ok("Factura creada correctamente: Id de la factura " + saved.getId());
+    @GetMapping("/list-invoices/{id}")
+    public ResponseEntity<InvoiceFullDTO> listInvoiceById(@PathVariable Long id) {
+        return ResponseEntity.ok(invoiceService.listInvoiceById(id));
+    }
+
+    @PostMapping("/create-invoices")
+    public ResponseEntity<InvoiceFullDTO> createInvoice(@RequestBody InvoiceDTO dto) {
+        InvoiceFullDTO created = invoiceService.createInvoice(dto);
+        return ResponseEntity.ok(created);
     }
 }

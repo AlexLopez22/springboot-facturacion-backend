@@ -1,0 +1,83 @@
+Lenguaje y Framework
+Java 17 / 25 → Lenguaje principal en el que está escrito tu backend.
+
+Spring Boot 3.5.9 → Framework que simplifica la creación de aplicaciones Java, integrando web, seguridad, JPA, etc.
+
+🗄️ Base de Datos y ORM
+SQL Server 16.0 → Motor de base de datos relacional donde guardas productos, clientes, facturas, cuotas, etc.
+
+Hibernate 6.6.39.Final → ORM (Object Relational Mapping) que convierte tus entidades Java en tablas SQL y viceversa.
+
+Spring Data JPA → Abstracción sobre Hibernate que te permite usar repositorios (findById, findAll) sin escribir SQL manual.
+
+🔐 Seguridad y Autenticación
+Spring Security → Framework de seguridad para proteger endpoints.
+
+JWT (JSON Web Token) → Tokens firmados que se envían en el header Authorization para identificar al usuario.
+
+JwtAuthFilter → Filtro personalizado que intercepta cada request, valida el token y extrae los claims (ejemplo: role=ADMIN_EMPRESA, tenantDb=10758336773).
+
+BCrypt → Algoritmo de encriptación usado para guardar contraseñas de forma segura.
+
+🌐 Arquitectura Multi-Tenant
+TenantRoutingDataSource → Clase que decide a qué base de datos conectarse según el tenantDb del token JWT.
+👉 Esto permite que cada empresa tenga su propia base de datos aislada.
+
+HikariCP → Pool de conexiones que gestiona eficientemente las conexiones a SQL Server.
+
+📦 Entidades y Relaciones
+Invoice (Factura) → Entidad principal que representa la factura.
+
+Installment (Cuota) → Entidad relacionada con la factura (@OneToMany ↔ @ManyToOne).
+
+InvoiceDetail (Detalle) → Ítems de la factura, cada uno vinculado a un producto.
+
+Product (Producto) → Entidad para los productos que se venden.
+
+Client (Cliente) → Entidad para los clientes que reciben las facturas.
+
+Relaciones JPA:
+
+@OneToMany y @ManyToOne → Para vincular facturas con cuotas y detalles.
+
+@JoinColumn → Define la columna de relación en la base de datos.
+
+mappedBy → Indica el lado inverso de la relación.
+
+📑 DTOs y Servicios
+DTO (Data Transfer Object) → Objetos que controlan qué datos se devuelven en las respuestas, evitando ciclos infinitos y respuestas demasiado grandes.
+
+Services (ProductService, InvoiceService, ClientService) → Contienen la lógica de negocio (ejemplo: asignar invoice a cada cuota antes de guardar).
+
+Controllers (ProductController, InvoiceController, ClientController, AuthController) → Exponen endpoints REST (/productos, /clientes, /invoices, /auth/login).
+
+🛠️ Maven y Build
+Maven → Herramienta de construcción y gestión de dependencias.
+
+spring-boot-maven-plugin → Permite ejecutar la aplicación con mvn spring-boot:run.
+
+.gitignore → Archivo para excluir target/, .idea/, .vscode/, etc. del repositorio.
+
+📊 Endpoints implementados
+Autenticación: /auth/login → devuelve JWT.
+
+Productos: POST /productos, GET /productos, GET /productos/{id}.
+
+Clientes: POST /clientes, GET /clientes.
+
+Facturas: POST /invoices → crea factura con cuotas y detalles, GET /invoices/{id} → devuelve factura con cliente, productos, cuotas y detalles.
+
+🎯 Resumen conceptual
+Spring Boot → motor de la aplicación.
+
+Spring Security + JWT → seguridad y autenticación.
+
+SQL Server + Hibernate/JPA → persistencia de datos.
+
+Multi-tenant con TenantRoutingDataSource → aislamiento por empresa.
+
+DTOs + Services + Controllers → arquitectura limpia y mantenible.
+
+BCrypt → seguridad de contraseñas.
+
+Maven + Git → gestión de dependencias y control de versiones.
