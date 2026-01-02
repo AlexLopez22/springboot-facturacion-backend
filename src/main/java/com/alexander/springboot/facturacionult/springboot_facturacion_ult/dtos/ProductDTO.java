@@ -1,6 +1,5 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
-import java.math.BigDecimal;
 
 public class ProductDTO {
 
