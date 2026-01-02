@@ -27,14 +27,13 @@ HikariCP → Pool de conexiones que gestiona eficientemente las conexiones a SQL
 •Entidades y Relaciones
 ....
 •Relaciones 
-mappedBy → Indica el lado inverso de la relación.
-
+....
 📑 DTOs y Servicios
 DTO (Data Transfer Object) → Objetos que controlan qué datos se devuelven en las respuestas, evitando ciclos infinitos y respuestas demasiado grandes.
 
-Services (ProductService, InvoiceService, ClientService) → Contienen la lógica de negocio (ejemplo: asignar invoice a cada cuota antes de guardar).
+Services (ProductService, InvoiceService, ClientService) → 
 
-Controllers (ProductController, InvoiceController, ClientController, AuthController) → Exponen endpoints REST (/productos, /clientes, /invoices, /auth/login).
+Controllers (ProductController, InvoiceController, ClientController, ) 
 
 🛠️ Maven y Build
 Maven → Herramienta de construcción y gestión de dependencias.
