@@ -35,33 +35,18 @@ Services (ProductService, InvoiceService, ClientService) →
 
 Controllers (ProductController, InvoiceController, ClientController, ) 
 
-🛠️ Maven y Build
-Maven → Herramienta de construcción y gestión de dependencias.
+Maven y Build
+Maven → gestión de dependencias.
 
-spring-boot-maven-plugin → Permite ejecutar la aplicación con mvn spring-boot:run.
+spring-boot-maven-plugin : ejecutar la aplicación con mvn spring-boot:run.
 
 .gitignore → Archivo para excluir target/, .idea/, .vscode/, etc. del repositorio.
 
-📊 Endpoints implementados
-Autenticación: /auth/login → devuelve JWT.
+Endpoints implementados
+Autenticación: /auth/login
 
-Productos: POST /productos, GET /productos, GET /productos/{id}.
+Productos: POST /product/createproduct, GET /product/listproduct, GET /productos/listproduct/{id}.
 
-Clientes: POST /clientes, GET /clientes.
+Clientes: POST /client/createclient, GET /client/listclient , GET /client/client/{id}
 
-Facturas: POST /invoices → crea factura con cuotas y detalles, GET /invoices/{id} → devuelve factura con cliente, productos, cuotas y detalles.
-
-🎯 Resumen conceptual
-Spring Boot → motor de la aplicación.
-
-Spring Security + JWT → seguridad y autenticación.
-
-SQL Server + Hibernate/JPA → persistencia de datos.
-
-Multi-tenant con TenantRoutingDataSource → aislamiento por empresa.
-
-DTOs + Services + Controllers → arquitectura limpia y mantenible.
-
-BCrypt → seguridad de contraseñas.
-
-Maven + Git → gestión de dependencias y control de versiones.
+Facturas: POST /invoices/createinvoices ,GET /invoices/listinvoices/, GET /invoices/listinvoices/{id} → 
