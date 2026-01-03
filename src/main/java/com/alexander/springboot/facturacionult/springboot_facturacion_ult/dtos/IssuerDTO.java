@@ -1,5 +1,7 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
+import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Issuer;
+
 public class IssuerDTO {
     private Long id;
     private String ruc;
@@ -11,6 +13,20 @@ public class IssuerDTO {
     private String distrito;
     private String direccionCompleta;
     private String codigoPais;
+
+    public IssuerDTO(Issuer issuer) {
+        this.id = issuer.getId();
+        this.ruc = issuer.getRuc();
+        this.razonSocial = issuer.getRazonSocial();
+        this.nombreComercial = issuer.getNombreComercial();
+        this.ubigeo = issuer.getUbigeo();
+        this.departamento = issuer.getDepartamento();
+        this.provincia = issuer.getProvincia();
+        this.distrito = issuer.getDistrito();
+        this.direccionCompleta = issuer.getDireccionCompleta();
+        this.codigoPais = issuer.getCodigoPais();
+    }
+
     public Long getId() {
         return id;
     }

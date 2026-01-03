@@ -2,6 +2,8 @@ package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
 import java.math.BigDecimal;
 
+import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.InvoiceDetail;
+
 public class InvoiceDetailDTO {
 
     private Long id;
@@ -16,7 +18,25 @@ public class InvoiceDetailDTO {
     private BigDecimal importeTotal;
     private String unidadMedida;
     private Integer item;
+    
 
+    public InvoiceDetailDTO() {
+    }
+
+    public InvoiceDetailDTO(InvoiceDetail detail) {
+        this.id = detail.getId();
+        this.productoId = detail.getProducto().getId();
+        this.codigoProducto = detail.getCodigoProducto();
+        this.descripcion = detail.getDescripcion();
+        this.cantidad = detail.getCantidad();
+        this.precioUnitario = detail.getPrecioUnitario();
+        this.valorUnitario = detail.getValorUnitario();
+        this.valorVenta = detail.getValorVenta();
+        this.afectacionIgv = detail.getAfectacionIgv();
+        this.importeTotal = detail.getImporteTotal();
+        this.unidadMedida = detail.getUnidadMedida();
+        this.item = detail.getItem();
+    }
     
     public Long getId() {
         return id;

@@ -16,6 +16,7 @@ public class InvoiceDTO {
     private String horaEmision; 
     private List<InvoiceDetailDTO> items;
     private TotalesDTO totales;
+    private List<InstallmentDTO> cuotas;
 
     public String getFechaEmision() {
         return fechaEmision;
@@ -94,6 +95,12 @@ public class InvoiceDTO {
     }
     public void setTotales(TotalesDTO totales) {
         this.totales = totales;
+    }
+    public List<InstallmentDTO> getCuotas() {
+        return cuotas;
+    }
+    public void setCuotas(List<InstallmentDTO> cuotas) {
+        this.cuotas = cuotas;
     }
     
     

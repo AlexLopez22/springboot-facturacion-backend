@@ -56,11 +56,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         .build()
                         .parseClaimsJws(token)
                         .getBody();
-                //para verificar el token recibido por consola
-                System.out.println("Authorization header: " + header);
-                System.out.println("Token recibido: " + token);
-                System.out.println("Claims: " + claims);
-
+                
                 String username = claims.getSubject();
                 String role = claims.get("role", String.class);
                 String tenantDb = claims.get("tenantDb", String.class);

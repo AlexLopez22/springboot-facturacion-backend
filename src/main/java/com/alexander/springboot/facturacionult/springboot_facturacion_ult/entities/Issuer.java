@@ -25,12 +25,16 @@ public class Issuer {
     @Column(name = "nombre_comercial")
     private String nombreComercial;
 
+    @Column(name = "ubigeo")
     private String ubigeo;
 
+    @Column(name = "departamento")
     private String departamento;
 
+    @Column(name = "provincia")
     private String provincia;
 
+    @Column(name = "distrito")
     private String distrito;
     
     @Column(name = "direccion_completa")

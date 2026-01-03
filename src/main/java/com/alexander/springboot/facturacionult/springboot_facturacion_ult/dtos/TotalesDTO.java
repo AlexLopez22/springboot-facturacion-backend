@@ -2,6 +2,8 @@ package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
 import java.math.BigDecimal;
 
+import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Totales;
+
 public class TotalesDTO {
     private Long id;
     private BigDecimal opGravada;     // Operaciones gravadas
@@ -12,6 +14,20 @@ public class TotalesDTO {
     private BigDecimal totalImpuestos;// Total impuestos
     private BigDecimal importeTotal;  // Importe total de la factura
     
+    public TotalesDTO() {
+        
+    }
+
+    public TotalesDTO(Totales totales) {
+        this.id = totales.getId();
+        this.opGravada = totales.getOpGravada();
+        this.opExonerada = totales.getOpExonerada();
+        this.opInafecta = totales.getOpInafecta();
+        this.opGratuita = totales.getOpGratuita();
+        this.igv = totales.getIgv();
+        this.totalImpuestos = totales.getTotalImpuestos();
+        this.importeTotal = totales.getImporteTotal();
+    }
     public Long getId() {
         return id;
     }

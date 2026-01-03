@@ -1,6 +1,6 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
-
+import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Client;
 
 public class ClientDTO {
     private Long id; 
@@ -8,6 +8,18 @@ public class ClientDTO {
     private String numeroDocumento; 
     private String razonSocial; 
     private AddressDTO  direccion;
+
+    public ClientDTO(Client client) {
+        this.id = client.getId();
+        this.tipoDocumento = client.getTipoDocumento();
+        this.numeroDocumento = client.getNumeroDocumento();
+        this.razonSocial = client.getRazonSocial();
+        if (client.getDireccion() != null) { 
+            this.direccion = new AddressDTO(client.getDireccion());
+            
+        }
+    }
+    
     public Long getId() {
         return id;
     }

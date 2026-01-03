@@ -1,4 +1,4 @@
-USE [10758336773]
+USE [20000000001]
 GO
 
 -- Crear el usuario dentro de la base, enlazado al login
@@ -7,167 +7,188 @@ CREATE USER springboot_user FOR LOGIN springboot_user;
 -- Darle permisos de dueño de base (puede crear/leer/escribir tablas)
 ALTER ROLE db_owner ADD MEMBER springboot_user;
 
+-- =========================
+-- Tabla emisores (empresa)
+-- =========================
+CREATE TABLE emisores (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    ruc VARCHAR(11) NOT NULL,
+    razon_social VARCHAR(255) NOT NULL,
+    nombre_comercial VARCHAR(255),
+    ubigeo VARCHAR(6),
+    departamento VARCHAR(100),
+    provincia VARCHAR(100),
+    distrito VARCHAR(100),
+    direccion_completa VARCHAR(255),
+    codigo_pais VARCHAR(5)
+);
 
-/****** Object:  Table [dbo].[clientes]    Script Date: 28/12/2025 20:21:20 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[clientes](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[ruc] [varchar](11) NULL,
-	[dni] [varchar](8) NULL,
-	[nombre_razon_social] [nvarchar](255) NOT NULL,
-	[direccion] [nvarchar](255) NULL,
-	[celular] [varchar](9) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[cuotas]    Script Date: 28/12/2025 20:21:20 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[cuotas](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[factura_id] [int] NOT NULL,
-	[numero] [int] NOT NULL,
-	[fecha_vencimiento] [date] NOT NULL,
-	[monto] [decimal](19, 2) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [UQ_Cuotas] UNIQUE NONCLUSTERED 
-(
-	[factura_id] ASC,
-	[numero] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[detalles_factura]    Script Date: 28/12/2025 20:21:20 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[detalles_factura](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[factura_id] [int] NOT NULL,
-	[producto_id] [int] NOT NULL,
-	[cantidad] [int] NOT NULL,
-	[precio_unitario] [decimal](19, 2) NOT NULL,
-	[afecta_igv] [bit] NOT NULL,
-	[valor_venta] [decimal](19, 2) NOT NULL,
-	[igv] [decimal](19, 2) NOT NULL,
-	[total_linea] [decimal](19, 2) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[facturas]    Script Date: 28/12/2025 20:21:20 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[facturas](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[fecha_emision] [datetime2](7) NOT NULL,
-	[fecha_registro] [datetime2](7) NOT NULL,
-	[cliente_id] [int] NOT NULL,
-	[condicion_pago] [varchar](10) NOT NULL,
-	[tipo_documento] [varchar](10) NOT NULL,
-	[moneda] [varchar](3) NOT NULL,
-	[tipo_operacion] [varchar](20) NOT NULL,
-	[serie] [varchar](4) NOT NULL,
-	[correlativo] [int] NOT NULL,
-	[sub_total] [decimal](19, 2) NOT NULL,
-	[igv_total] [decimal](19, 2) NOT NULL,
-	[total] [decimal](19, 2) NOT NULL,
-	[tipo_cambio] [decimal](19, 6) NULL,
-	[estado] [varchar](20) NOT NULL,
-	[fecha_creacion] [datetime2](7) NOT NULL,
-	[fecha_actualizacion] [datetime2](7) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [UQ_Facturas] UNIQUE NONCLUSTERED 
-(
-	[tipo_documento] ASC,
-	[serie] ASC,
-	[correlativo] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[productos]    Script Date: 28/12/2025 20:21:20 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[productos](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[codigo] [varchar](50) NOT NULL,
-	[descripcion] [nvarchar](255) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
-UNIQUE NONCLUSTERED 
-(
-	[codigo] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[facturas] ADD  CONSTRAINT [DF__facturas__estado__440B1D61]  DEFAULT ('EMITIDA') FOR [estado]
-GO
-ALTER TABLE [dbo].[facturas] ADD  CONSTRAINT [DF__facturas__create__44FF419A]  DEFAULT (sysdatetime()) FOR [fecha_creacion]
-GO
-ALTER TABLE [dbo].[facturas] ADD  DEFAULT (sysdatetime()) FOR [fecha_actualizacion]
-GO
-ALTER TABLE [dbo].[cuotas]  WITH CHECK ADD  CONSTRAINT [FK_Cuotas_Facturas] FOREIGN KEY([factura_id])
-REFERENCES [dbo].[facturas] ([id])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[cuotas] CHECK CONSTRAINT [FK_Cuotas_Facturas]
-GO
-ALTER TABLE [dbo].[detalles_factura]  WITH CHECK ADD  CONSTRAINT [FK_Detalles_Factura_Facturas] FOREIGN KEY([factura_id])
-REFERENCES [dbo].[facturas] ([id])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[detalles_factura] CHECK CONSTRAINT [FK_Detalles_Factura_Facturas]
-GO
-ALTER TABLE [dbo].[detalles_factura]  WITH CHECK ADD  CONSTRAINT [FK_Detalles_Factura_Productos] FOREIGN KEY([producto_id])
-REFERENCES [dbo].[productos] ([id])
-GO
-ALTER TABLE [dbo].[detalles_factura] CHECK CONSTRAINT [FK_Detalles_Factura_Productos]
-GO
-ALTER TABLE [dbo].[facturas]  WITH CHECK ADD  CONSTRAINT [FK_Facturas_Clientes] FOREIGN KEY([cliente_id])
-REFERENCES [dbo].[clientes] ([id])
-GO
-ALTER TABLE [dbo].[facturas] CHECK CONSTRAINT [FK_Facturas_Clientes]
-GO
-ALTER TABLE [dbo].[facturas]  WITH CHECK ADD  CONSTRAINT [CK__facturas__condic__47DBAE45] CHECK  (([condicion_pago]='CREDITO' OR [condicion_pago]='CONTADO'))
-GO
-ALTER TABLE [dbo].[facturas] CHECK CONSTRAINT [CK__facturas__condic__47DBAE45]
-GO
-ALTER TABLE [dbo].[facturas]  WITH CHECK ADD  CONSTRAINT [CK__facturas__estado__48CFD27E] CHECK  (([estado]='ANULADA' OR [estado]='RECHAZADA' OR [estado]='OBSERVADA' OR [estado]='ACEPTADA' OR [estado]='ENVIADA_SUNAT' OR [estado]='EMITIDA'))
-GO
-ALTER TABLE [dbo].[facturas] CHECK CONSTRAINT [CK__facturas__estado__48CFD27E]
-GO
-ALTER TABLE [dbo].[facturas]  WITH CHECK ADD  CONSTRAINT [CK__facturas__moneda__49C3F6B7] CHECK  (([moneda]='USD' OR [moneda]='PEN'))
-GO
-ALTER TABLE [dbo].[facturas] CHECK CONSTRAINT [CK__facturas__moneda__49C3F6B7]
-GO
-ALTER TABLE [dbo].[facturas]  WITH CHECK ADD  CONSTRAINT [CK__facturas__tipo_do__4AB81AF0] CHECK  (([tipo_documento]='BOLETA' OR [tipo_documento]='FACTURA'))
-GO
-ALTER TABLE [dbo].[facturas] CHECK CONSTRAINT [CK__facturas__tipo_do__4AB81AF0]
-GO
-ALTER TABLE [dbo].[facturas]  WITH CHECK ADD  CONSTRAINT [CK__facturas__tipo_op__4BAC3F29] CHECK  (([tipo_operacion]='OPERACION_1001' OR [tipo_operacion]='OPERACION_0401' OR [tipo_operacion]='OPERACION_0200' OR [tipo_operacion]='OPERACION_0101'))
-GO
-ALTER TABLE [dbo].[facturas] CHECK CONSTRAINT [CK__facturas__tipo_op__4BAC3F29]
-GO
+-- =========================
+-- Tabla clientes
+-- =========================
+CREATE TABLE clientes (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    tipo_documento VARCHAR(2) NOT NULL,
+    numero_documento VARCHAR(20) NOT NULL,
+    razon_social VARCHAR(255) NOT NULL,
+    direccion_completa VARCHAR(255)
+);
+
+-- =========================
+-- Tabla productos
+-- =========================
+CREATE TABLE productos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    codigo VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    unidad_medida VARCHAR(10),
+    afectacion_igv VARCHAR(10),
+    estado VARCHAR(20) DEFAULT 'ACTIVO'
+);
+
+-- =========================
+-- Tabla totales
+-- =========================
+CREATE TABLE totales (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    op_gravada DECIMAL(12,2),
+    op_exonerada DECIMAL(12,2),
+    op_inafecta DECIMAL(12,2),
+    op_gratuita DECIMAL(12,2),
+    igv DECIMAL(12,2),
+    total_impuestos DECIMAL(12,2),
+    importe_total DECIMAL(12,2)
+);
+
+-- =========================
+-- Tabla formas de pago
+-- =========================
+CREATE TABLE formas_pago (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    tipo VARCHAR(20) NOT NULL
+);
+
+-- =========================
+-- Tabla sunat (estado envío)
+-- =========================
+CREATE TABLE sunat (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    hash_cpe VARCHAR(255),
+    estado VARCHAR(20),
+    cdr VARBINARY(MAX),
+    fecha_envio DATETIME
+);
+
+-- =========================
+-- Tabla comprobantes
+-- =========================
+CREATE TABLE comprobantes (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    tipo_comprobante VARCHAR(2) NOT NULL,
+    serie VARCHAR(10) NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    fecha_emision DATE NOT NULL,
+    hora_emision TIME NOT NULL,
+    moneda VARCHAR(3) NOT NULL,
+    tipo_operacion VARCHAR(10) NOT NULL,
+    emisor_id BIGINT NOT NULL,
+    cliente_id BIGINT NOT NULL,
+    forma_pago_id BIGINT,
+    totales_id BIGINT,
+    sunat_id BIGINT,
+    FOREIGN KEY (emisor_id) REFERENCES emisores(id),
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id),
+    FOREIGN KEY (forma_pago_id) REFERENCES formas_pago(id),
+    FOREIGN KEY (totales_id) REFERENCES totales(id),
+    FOREIGN KEY (sunat_id) REFERENCES sunat(id)
+);
+
+-- =========================
+-- Tabla items (detalle factura)
+-- =========================
+CREATE TABLE items (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    item INT NOT NULL,
+    codigo_producto VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    cantidad DECIMAL(12,2) NOT NULL,
+    unidad_medida VARCHAR(10),
+    valor_unitario DECIMAL(12,2),
+    precio_unitario DECIMAL(12,2),
+    valor_venta DECIMAL(12,2),
+    afectacion_igv VARCHAR(10),
+    importe_total DECIMAL(12,2),
+    comprobante_id BIGINT NOT NULL,
+    producto_id BIGINT,
+    FOREIGN KEY (comprobante_id) REFERENCES comprobantes(id),
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+);
+
+-- =========================
+-- Tabla item_impuestos
+-- =========================
+CREATE TABLE item_impuestos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    base_imponible DECIMAL(12,2),
+    porcentaje DECIMAL(5,2),
+    igv DECIMAL(12,2),
+    codigo_tributo VARCHAR(10),
+    item_id BIGINT NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES items(id)
+);
+
+-- =========================
+-- Tabla impuestos (cabecera)
+-- =========================
+CREATE TABLE impuestos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    total_impuestos DECIMAL(12,2) NOT NULL,
+    comprobante_id BIGINT NOT NULL,
+    FOREIGN KEY (comprobante_id) REFERENCES comprobantes(id)
+);
+
+-- =========================
+-- Tabla impuestos_detalles
+-- =========================
+CREATE TABLE impuestos_detalles (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    codigo_tributo VARCHAR(10) NOT NULL,
+    nombre_tributo VARCHAR(50) NOT NULL,
+    codigo_tipo_tributo VARCHAR(10),
+    base_imponible DECIMAL(12,2) NOT NULL,
+    monto_impuesto DECIMAL(12,2) NOT NULL,
+    impuesto_id BIGINT NOT NULL,
+    FOREIGN KEY (impuesto_id) REFERENCES impuestos(id)
+);
+
+-- =========================
+-- Tabla referencias
+-- =========================
+CREATE TABLE referencias (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    orden_compra VARCHAR(50),
+    guia_remision VARCHAR(50),
+    comprobante_id BIGINT NOT NULL,
+    FOREIGN KEY (comprobante_id) REFERENCES comprobantes(id)
+);
+
+-- =========================
+-- Tabla leyendas
+-- =========================
+CREATE TABLE leyendas (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    codigo VARCHAR(10),
+    descripcion VARCHAR(255),
+    comprobante_id BIGINT NOT NULL,
+    FOREIGN KEY (comprobante_id) REFERENCES comprobantes(id)
+);
+
+CREATE TABLE cuotas (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    numero_cuota INT NOT NULL,
+    fecha_vencimiento DATE NOT NULL,
+    importe DECIMAL(12,2) NOT NULL,
+    comprobante_id BIGINT NOT NULL,
+    FOREIGN KEY (comprobante_id) REFERENCES comprobantes(id)
+);
+

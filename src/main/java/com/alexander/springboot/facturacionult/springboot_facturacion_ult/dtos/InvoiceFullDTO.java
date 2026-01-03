@@ -11,13 +11,13 @@ public class InvoiceFullDTO {
     private String tipoOperacion;
     private String fechaEmision;
     private String horaEmision;
-
-    private ClientDTO client;
-    private IssuerDTO issuer;
-    private PaymentMethodDTO paymentMethod;
-
+    private ClientDTO cliente;
+    private IssuerDTO emisor;
+    private PaymentMethodDTO formaPago;
     private List<InvoiceDetailDTO> items;
     private TotalesDTO totales;
+    private List<InstallmentDTO> cuotas;
+
     public Long getId() {
         return id;
     }
@@ -66,23 +66,23 @@ public class InvoiceFullDTO {
     public void setHoraEmision(String horaEmision) {
         this.horaEmision = horaEmision;
     }
-    public ClientDTO getClient() {
-        return client;
+    public ClientDTO getCliente() {
+        return cliente;
     }
-    public void setClient(ClientDTO client) {
-        this.client = client;
+    public void setCliente(ClientDTO client) {
+        this.cliente = client;
     }
-    public IssuerDTO getIssuer() {
-        return issuer;
+    public IssuerDTO getEmisor() {
+        return emisor;
     }
-    public void setIssuer(IssuerDTO issuer) {
-        this.issuer = issuer;
+    public void setEmisor(IssuerDTO issuer) {
+        this.emisor = issuer;
     }
-    public PaymentMethodDTO getPaymentMethod() {
-        return paymentMethod;
+    public PaymentMethodDTO getFormaPago() {
+        return formaPago;
     }
-    public void setPaymentMethod(PaymentMethodDTO paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setFormaPago(PaymentMethodDTO paymentMethod) {
+        this.formaPago = paymentMethod;
     }
     public List<InvoiceDetailDTO> getItems() {
         return items;
@@ -95,6 +95,12 @@ public class InvoiceFullDTO {
     }
     public void setTotales(TotalesDTO totales) {
         this.totales = totales;
+    }
+    public List<InstallmentDTO> getCuotas() {
+        return cuotas;
+    }
+    public void setCuotas(List<InstallmentDTO> cuotas) {
+        this.cuotas = cuotas;
     }
 
         

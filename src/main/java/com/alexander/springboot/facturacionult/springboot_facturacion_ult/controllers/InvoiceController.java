@@ -20,9 +20,10 @@ public class InvoiceController {
     }
 
     @GetMapping("/list-invoices")
-    public ResponseEntity<List<InvoiceDTO>> listInvoices() {
+    public ResponseEntity<List<InvoiceFullDTO>> listInvoices() {
         return ResponseEntity.ok(invoiceService.listInvoices());
-    }
+}
+
 
     @GetMapping("/list-invoices/{id}")
     public ResponseEntity<InvoiceFullDTO> listInvoiceById(@PathVariable Long id) {

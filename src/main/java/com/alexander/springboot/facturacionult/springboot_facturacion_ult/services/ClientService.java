@@ -1,6 +1,5 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.services;
 
-import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.AddressDTO;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.ClientDTO;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Address;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Client;
@@ -19,6 +18,18 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
+    public List<ClientDTO> listClient() {
+        return clientRepository.findAll().stream().map(this::mapToDTO).toList();
+    }
+
+    public Optional<ClientDTO> listClientById(Long id) {
+        return clientRepository.findById(id).map(this::mapToDTO);
+    }
+    // Convierte la entidad Client en un DTO para enviar datos seguros al frontend
+    private ClientDTO mapToDTO(Client client) {
+        return new ClientDTO(client); 
+    }
+
     public ClientDTO createClient(ClientDTO request) {
         
         Client client = new Client();
@@ -33,32 +44,5 @@ public class ClientService {
         }
         Client saved = clientRepository.save(client);
         return mapToDTO(saved); 
-    }
-
-    public List<ClientDTO> listClient() {
-        return clientRepository.findAll().stream()
-                .map(this::mapToDTO)
-                .toList();
-    }
-
-    public Optional<ClientDTO> listClientById(Long id) {
-        return clientRepository.findById(id)
-                .map(this::mapToDTO);
-    }
-    
-    private ClientDTO mapToDTO(Client client) {
-        ClientDTO dto = new ClientDTO();
-        dto.setId(client.getId());
-        dto.setTipoDocumento(client.getTipoDocumento());
-        dto.setNumeroDocumento(client.getNumeroDocumento());
-        dto.setRazonSocial(client.getRazonSocial());
-
-        if (client.getDireccion() != null) {
-            AddressDTO addressDTO = new AddressDTO();
-            addressDTO.setDireccionCompleta(client.getDireccion().getDireccionCompleta());
-            dto.setDireccion(addressDTO);
-        }
-    
-        return dto;
     }
 }

@@ -64,6 +64,10 @@ public class Invoice {
     @JoinColumn(name = "sunat_id")
     private Sunat sunat;
 
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true) 
+    private List<Installment> cuotas;;
+
+
     public Long getId() {
         return id;
     }
@@ -190,6 +194,14 @@ public class Invoice {
 
     public void setSunat(Sunat sunat) {
         this.sunat = sunat;
+    }
+
+    public List<Installment> getCuotas() {
+        return cuotas;
+    }
+
+    public void setCuotas(List<Installment> cuotas) {
+        this.cuotas = cuotas;
     }
 
 
