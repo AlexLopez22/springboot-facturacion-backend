@@ -2,7 +2,10 @@ package com.alexander.springboot.facturacionult.springboot_facturacion_ult.entit
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,10 +19,11 @@ public class PaymentMethod {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tipo; 
+    private String tipo;
 
-    @OneToMany(mappedBy = "formaPago")
-    private List<Invoice> comprobante;
+    @OneToMany(mappedBy = "formaPago", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Invoice> comprobantes;
 
     public Long getId() {
         return id;
@@ -37,13 +41,12 @@ public class PaymentMethod {
         this.tipo = tipo;
     }
 
-    public List<Invoice> getComprobante() {
-        return comprobante;
+    public List<Invoice> getComprobantes() {
+        return comprobantes;
     }
 
-    public void setComprobante(List<Invoice> invoices) {
-        this.comprobante = invoices;
+    public void setComprobantes(List<Invoice> comprobantes) {
+        this.comprobantes = comprobantes;
     }
 
-    
 }

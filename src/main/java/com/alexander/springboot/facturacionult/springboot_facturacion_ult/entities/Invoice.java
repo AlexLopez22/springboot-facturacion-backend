@@ -13,11 +13,14 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tipo_comprobante")
-    private String tipoComprobante;
+   @ManyToOne
+    @JoinColumn(name = "tipo_comprobante_id", nullable = false)
+    private Document tipoComprobante;
 
-    @Column(name = "serie")
-    private String serie;
+
+    @ManyToOne 
+    @JoinColumn(name = "serie_id", nullable = false) 
+    private Serie serie;
 
     @Column(name = "numero")
     private String numero;
@@ -65,7 +68,7 @@ public class Invoice {
     private Sunat sunat;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true) 
-    private List<Installment> cuotas;;
+    private List<Installment> cuotas;
 
 
     public Long getId() {
@@ -76,25 +79,24 @@ public class Invoice {
         this.id = id;
     }
 
-    public String getTipoComprobante() {
+    public Document getTipoComprobante() {
         return tipoComprobante;
     }
-
-    public void setTipoComprobante(String tipoComprobante) {
+    public void setTipoComprobante(Document tipoComprobante) {
         this.tipoComprobante = tipoComprobante;
     }
 
-    public String getSerie() {
+    public Serie getSerie() {
         return serie;
     }
-
-    public void setSerie(String serie) {
+    public void setSerie(Serie serie) {
         this.serie = serie;
     }
 
     public String getNumero() {
         return numero;
     }
+    
 
     public void setNumero(String numero) {
         this.numero = numero;

@@ -15,7 +15,7 @@ public class PersistenceConfig {
     public DataSource dataSource(DataSourceRegistry registry) {
         // Datos central  de TIS_INTEGRADO
         DataSource defaultDs = DataSourceBuilder.create()
-                .url("jdbc:sqlserver://localhost:1433;databaseName=TIS_INTEGRADO;encrypt=false")
+                .url("jdbc:sqlserver://ALEXANDER:1433;databaseName=TIS_INTEGRADO;encrypt=false")
                 .username("springboot_user")
                 .password("P@$$w0rd")
                 .driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")

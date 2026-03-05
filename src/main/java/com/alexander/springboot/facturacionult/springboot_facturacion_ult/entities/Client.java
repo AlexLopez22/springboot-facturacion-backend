@@ -25,10 +25,78 @@ public class Client {
         @Embedded 
         @AttributeOverrides({ @AttributeOverride(name = "direccionCompleta", column = @Column(name = "direccion_completa")) }) 
         private Address direccion; 
+
+        @Column(name = "estado")
+        private String estado;
+
+        @Column(name = "condicion")
+        private String condicion;
+
+        @Column(name = "ubigeo")
+        private String ubigeo;
+
+        @Column(name = "via_tipo")
+        private String viaTipo;
+
+        @Column(name = "via_nombre")
+        private String viaNombre;
+
+        @Column(name = "zona_tipo")
+        private String zonaTipo;
+
     
         // Relación con facturas
         @OneToMany(mappedBy = "cliente")
         private List<Invoice> invoices;
+
+        
+        public String getEstado() {
+            return estado;
+        }
+
+        public void setEstado(String estado) {
+            this.estado = estado;
+        }
+
+        public String getCondicion() {
+            return condicion;
+        }
+
+        public void setCondicion(String condicion) {
+            this.condicion = condicion;
+        }
+
+        public String getUbigeo() {
+            return ubigeo;
+        }
+
+        public void setUbigeo(String ubigeo) {
+            this.ubigeo = ubigeo;
+        }
+
+        public String getViaTipo() {
+            return viaTipo;
+        }
+
+        public void setViaTipo(String viaTipo) {
+            this.viaTipo = viaTipo;
+        }
+
+        public String getViaNombre() {
+            return viaNombre;
+        }
+
+        public void setViaNombre(String viaNombre) {
+            this.viaNombre = viaNombre;
+        }
+
+        public String getZonaTipo() {
+            return zonaTipo;
+        }
+
+        public void setZonaTipo(String zonaTipo) {
+            this.zonaTipo = zonaTipo;
+        }
 
         public Long getId() {
             return id;

@@ -5,6 +5,9 @@ import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entiti
 public class AddressDTO {
     private String direccionCompleta;
 
+    public AddressDTO(){
+
+    }
     public AddressDTO(Address address) { 
         this.direccionCompleta = address.getDireccionCompleta(); 
     }

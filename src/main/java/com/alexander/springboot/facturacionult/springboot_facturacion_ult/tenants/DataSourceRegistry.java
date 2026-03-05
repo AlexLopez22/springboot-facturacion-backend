@@ -39,7 +39,7 @@ public class DataSourceRegistry {
         // Construye un nuevo DataSource dinámicamente
         DataSource ds = DataSourceBuilder.create()
                 .driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-                .url("jdbc:sqlserver://localhost:1433;databaseName=" + tenantId + ";encrypt=false")
+                .url("jdbc:sqlserver://ALEXANDER:1433;databaseName=" + tenantId + ";encrypt=false")
                 .username("springboot_user")
                 .password("P@$$w0rd")
                 .build();

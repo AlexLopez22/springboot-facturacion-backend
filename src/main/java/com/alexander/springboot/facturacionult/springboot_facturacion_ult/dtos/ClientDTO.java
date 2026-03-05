@@ -1,6 +1,7 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos;
 
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Client;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ClientDTO {
     private Long id; 
@@ -8,6 +9,15 @@ public class ClientDTO {
     private String numeroDocumento; 
     private String razonSocial; 
     private AddressDTO  direccion;
+    private String estado;
+    private String condicion;
+    private String ubigeo;
+    private String viaTipo;
+    private String viaNombre;
+    private String zonaTipo;
+    
+    @JsonProperty("nombre")
+    private String nombre;
 
     public ClientDTO(Client client) {
         this.id = client.getId();
@@ -18,8 +28,73 @@ public class ClientDTO {
             this.direccion = new AddressDTO(client.getDireccion());
             
         }
+        this.estado = client.getEstado();
+        this.condicion = client.getCondicion();
+        this.ubigeo = client.getUbigeo();
+        this.viaTipo = client.getViaTipo();
+        this.viaNombre = client.getViaNombre();
+        this.zonaTipo = client.getZonaTipo();
     }
     
+    public ClientDTO() {
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getCondicion() {
+        return condicion;
+    }
+
+    public void setCondicion(String condicion) {
+        this.condicion = condicion;
+    }
+
+    public String getUbigeo() {
+        return ubigeo;
+    }
+
+    public void setUbigeo(String ubigeo) {
+        this.ubigeo = ubigeo;
+    }
+
+    public String getViaTipo() {
+        return viaTipo;
+    }
+
+    public void setViaTipo(String viaTipo) {
+        this.viaTipo = viaTipo;
+    }
+
+    public String getViaNombre() {
+        return viaNombre;
+    }
+
+    public void setViaNombre(String viaNombre) {
+        this.viaNombre = viaNombre;
+    }
+
+    public String getZonaTipo() {
+        return zonaTipo;
+    }
+
+    public void setZonaTipo(String zonaTipo) {
+        this.zonaTipo = zonaTipo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Long getId() {
         return id;
     }

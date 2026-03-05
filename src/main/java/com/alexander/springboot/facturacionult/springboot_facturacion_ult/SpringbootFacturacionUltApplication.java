@@ -8,6 +8,7 @@ public class SpringbootFacturacionUltApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootFacturacionUltApplication.class, args);
+		
 	}
 
 }

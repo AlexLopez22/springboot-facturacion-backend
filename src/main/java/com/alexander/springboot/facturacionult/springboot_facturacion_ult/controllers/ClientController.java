@@ -25,16 +25,24 @@ public class ClientController {
     }
      
      // Obtener cliente por ID
-     @GetMapping("/list-clients/{id}")
-     public ResponseEntity<ClientDTO> listClientById(@PathVariable Long id) {
+    @GetMapping("/list-clients/{id}")
+    public ResponseEntity<ClientDTO> listClientById(@PathVariable Long id) {
          return clientService.listClientById(id)
                  .map(ResponseEntity::ok)
                  .orElse(ResponseEntity.notFound().build());
      }
+
+    @GetMapping("/sunat/{ruc}")
+    public ResponseEntity<ClientDTO> consultarRuc(@PathVariable String ruc) {
+        return ResponseEntity.ok(clientService.consultarDatosSunat(ruc));
+    }
+    @GetMapping("/reniec/{dni}")
+    public ClientDTO consultarDni(@PathVariable String dni) {
+        return clientService.consultarDatosReniec(dni);
+}
      
-     @PostMapping("/create-client")
-     public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO request) {
-         ClientDTO dto = clientService.createClient(request);
-     return ResponseEntity.ok(dto);
- }
+    @PostMapping("/create-client")
+    public ClientDTO guardar(@RequestBody ClientDTO dto) {
+        return clientService.guardar(dto);
+    }
 }
