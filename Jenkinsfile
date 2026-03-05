@@ -1,4 +1,4 @@
-# prueba jenkins
+// prueba jenkins
 pipeline {
     agent any
     stages {
