@@ -8,3 +8,4 @@ class LoginTest {
         return Karate.run("classpath:facturacion/login");
     }
 }
+ 
