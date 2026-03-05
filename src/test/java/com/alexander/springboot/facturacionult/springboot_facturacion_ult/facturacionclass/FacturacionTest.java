@@ -5,6 +5,6 @@ import com.intuit.karate.junit5.Karate;
 class FacturacionTest {
     @Karate.Test
     Karate testFacturas() {
-        return Karate.run("facturacion/factura").relativeTo(getClass());
+        return Karate.run("classpath:facturacion/factura");
     }
 }
