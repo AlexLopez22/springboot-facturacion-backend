@@ -3,7 +3,7 @@ Feature: Crear factura
 Scenario: Crear factura correctamente
 
 # Obtener token
-* def login = call read('login.feature')
+* def login = call read('classpath:facturacion/login.feature')
 * def token = login.token
 
 Given url 'http://localhost:8080/invoices/create-invoices'
