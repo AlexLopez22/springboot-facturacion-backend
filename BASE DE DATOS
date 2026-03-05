@@ -192,3 +192,8 @@ CREATE TABLE cuotas (
     FOREIGN KEY (comprobante_id) REFERENCES comprobantes(id)
 );
 
+INSERT INTO emisores (ruc, razon_social, nombre_comercial, ubigeo, departamento, provincia, distrito, direccion_completa, codigo_pais
+) VALUES ('11111111111', 'EMPRESA PRUEBA SAC', 'Mi Empresa', '150101', 'Lima', 'Lima', 'Lima', 'Av. 123', 'PE');
+
+INSERT INTO formas_pago (tipo) VALUES ('Contado');
+INSERT INTO formas_pago (tipo) VALUES ('Crédito');
