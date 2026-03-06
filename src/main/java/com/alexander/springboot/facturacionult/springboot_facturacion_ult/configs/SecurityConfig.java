@@ -27,13 +27,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // habilitar CORS
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/auth/**").permitAll()
-                        .requestMatchers("/clients/sunat/**").permitAll()
-                        .requestMatchers("/clients/reniec/**").permitAll()
-                        .requestMatchers("/ubigeos").permitAll()
-                        .requestMatchers("/clients/create-client").authenticated()
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
+                // Configuración de autorización 
+                .authorizeHttpRequests(auth -> auth                    
+                        .requestMatchers("/api/auth/**", "/auth/**").permitAll()// Permitir acceso a la ruta sin necesidad de estar autenticado
+                        .requestMatchers("/clients/sunat/**").permitAll()// Permitir acceso a la ruta sin necesidad de estar autenticado
+                        .requestMatchers("/clients/reniec/**").permitAll()// Permitir acceso a la ruta sin necesidad de estar autenticado
+                        .requestMatchers("/ubigeos").permitAll()// Permitir acceso a la ruta sin necesidad de estar autenticado
+                        .requestMatchers("/clients/create-client").authenticated()  // Permitir acceso a la ruta de creación de clientes solo para usuarios autenticados 
+                        .requestMatchers("/invoices/**").authenticated()// Permitir acceso a la ruta de creación de facturas solo para usuarios autenticados
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -49,7 +51,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // el  frontend
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:8080"));// el  frontend
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

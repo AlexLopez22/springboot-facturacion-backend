@@ -4,8 +4,8 @@ import java.util.List;
 
 public class InvoiceDTO { 
     private Long id;
-    private String tipoComprobante;
-    private String serie;
+    private Integer tipoComprobante; 
+    private Integer serie; 
     private String numero;
     private String moneda;
     private String tipoOperacion;
@@ -17,35 +17,22 @@ public class InvoiceDTO {
     private List<InvoiceDetailDTO> items;
     private TotalesDTO totales;
     private List<InstallmentDTO> cuotas;
-
-    public String getFechaEmision() {
-        return fechaEmision;
-    }
-    public void setFechaEmision(String fechaEmision) {
-        this.fechaEmision = fechaEmision;
-    }
-    public String getHoraEmision() {
-        return horaEmision;
-    }
-    public void setHoraEmision(String horaEmision) {
-        this.horaEmision = horaEmision;
-    }
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
-    public String getTipoComprobante() {
+    public Integer getTipoComprobante() {
         return tipoComprobante;
     }
-    public void setTipoComprobante(String tipoComprobante) {
+    public void setTipoComprobante(Integer tipoComprobante) {
         this.tipoComprobante = tipoComprobante;
     }
-    public String getSerie() {
+    public Integer getSerie() {
         return serie;
     }
-    public void setSerie(String serie) {
+    public void setSerie(Integer serie) {
         this.serie = serie;
     }
     public String getNumero() {
@@ -84,6 +71,18 @@ public class InvoiceDTO {
     public void setFormaPagoId(Long formaPagoId) {
         this.formaPagoId = formaPagoId;
     }
+    public String getFechaEmision() {
+        return fechaEmision;
+    }
+    public void setFechaEmision(String fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+    public String getHoraEmision() {
+        return horaEmision;
+    }
+    public void setHoraEmision(String horaEmision) {
+        this.horaEmision = horaEmision;
+    }
     public List<InvoiceDetailDTO> getItems() {
         return items;
     }
@@ -102,7 +101,8 @@ public class InvoiceDTO {
     public void setCuotas(List<InstallmentDTO> cuotas) {
         this.cuotas = cuotas;
     }
-    
+
+  
     
 
 

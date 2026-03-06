@@ -1,12 +1,12 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.services;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.*;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.*;
@@ -111,19 +111,19 @@ public class InvoiceService {
     public InvoiceFullDTO createInvoice(InvoiceDTO dto) {
         // 1. Crear registro en SUNAT con estado pendiente
         Sunat sunat = new Sunat();
-        sunat.setEstado("PENDIENTE");
+        sunat.setEstado("PENDIENTE"); 
         sunat.setHashCpe(null);
         sunat.setCdr(null);
         sunat.setFechaEnvio(null);
 
         // 2. Crear comprobante
         Invoice invoice = new Invoice();
-        Document documento = documentRepository.findByNombre(dto.getTipoComprobante())
-                .orElseThrow(() -> new RuntimeException("Tipo de comprobante no encontrado"));
+        Document documento = documentRepository.findById(dto.getTipoComprobante())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de comprobante no encontrado"));
         invoice.setTipoComprobante(documento);
 
-        Serie serie = serieRepository.findByNombreSerie(dto.getSerie())
-                .orElseThrow(() -> new RuntimeException("La serie '" + dto.getSerie() + "' no existe"));
+        Serie serie = serieRepository.findById(dto.getSerie())
+    .orElseThrow(() -> new RuntimeException("La serie '" + dto.getSerie() + "' no existe"));
         invoice.setSerie(serie);
 
         invoice.setNumero(dto.getNumero());
