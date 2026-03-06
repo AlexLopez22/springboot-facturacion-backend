@@ -12,7 +12,7 @@ Feature: Crear facturas - POST /invoices/create-invoices
   {
     "tipoComprobante": 1,
     "serie": 24,
-    "numero": "00000008",
+    "numero": "00000010",
     "moneda": "PEN",
     "tipoOperacion": "0101",
     "clienteId": 18,
