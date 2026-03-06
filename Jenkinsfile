@@ -40,10 +40,11 @@ pipeline {
         // Para Windows, usa 'bat' en lugar de 'sh'
         stage('Run Backend') {
             steps {
-                bat "start /B java -jar target/springboot-facturacion-ult-0.0.1-SNAPSHOT.jar"
+                bat "start /B java -jar target/springboot-facturacion-ult-0.0.1-SNAPSHOT.jar > backend.log 2>&1"
                 sleep 15
             }
 }
+
 
 
 
