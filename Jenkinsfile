@@ -37,15 +37,17 @@ pipeline {
                 sh 'mvn clean package -DskipTests -q'
             }
         }
-
+        // Para Windows, usa 'bat' en lugar de 'sh'
         stage('Run Backend') {
+            // Aquí asumimos que el proyecto se ejecuta con 'mvn spring-boot:run'
             steps {
-                // Arranca el backend en segundo plano
-                sh 'mvn spring-boot:run &'
-                // Espera unos segundos para que el servidor esté listo
+                // En Windows, el comando sería algo como:
+                bat 'start mvn spring-boot:run'
+                // Esperamos un poco para que el backend esté listo antes de correr los tests
                 sleep 15
             }
         }
+
 
         stage('Unit Tests') {
             steps {
