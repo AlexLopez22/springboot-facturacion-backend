@@ -38,6 +38,15 @@ pipeline {
             }
         }
 
+        stage('Run Backend') {
+            steps {
+                // Arranca el backend en segundo plano
+                sh 'mvn spring-boot:run &'
+                // Espera unos segundos para que el servidor esté listo
+                sleep 15
+            }
+        }
+
         stage('Unit Tests') {
             steps {
                 // Excluye KarateRunner para que no corra aquí
@@ -66,7 +75,6 @@ pipeline {
             }
             post {
                 always {
-                    // Reporte HTML de Karate (generado automáticamente)
                     publishHTML(target: [
                         allowMissing:       false,
                         alwaysLinkToLastBuild: true,
@@ -76,7 +84,6 @@ pipeline {
                         reportName:         '📋 Karate API Report'
                     ])
 
-                    // JUnit XML para que Jenkins marque el build como fallido si hay tests rotos
                     junit allowEmptyResults: true,
                           testResults: 'target/karate-reports/*.xml'
                 }
@@ -92,7 +99,6 @@ pipeline {
             echo "❌ Pipeline falló — revisa el Karate Report en la pestaña de arriba"
         }
         always {
-            // Limpiar workspace para no acumular artefactos
             cleanWs()
         }
     }
