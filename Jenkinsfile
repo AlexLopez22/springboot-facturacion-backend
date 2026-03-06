@@ -37,16 +37,6 @@ pipeline {
                 sh 'mvn clean package -DskipTests -q'
             }
         }
-        // Para Windows, usa 'bat' en lugar de 'sh'
-        stage('Run Backend') {
-            steps {
-                bat "start /B java -jar target/springboot-facturacion-ult-0.0.1-SNAPSHOT.jar > backend.log 2>&1"
-                sleep 15
-            }
-}
-
-
-
 
         stage('Unit Tests') {
             steps {
