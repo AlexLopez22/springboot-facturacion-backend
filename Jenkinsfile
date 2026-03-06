@@ -39,13 +39,12 @@ pipeline {
         }
         // Para Windows, usa 'bat' en lugar de 'sh'
         stage('Run Backend') {
-            // Aquí asumimos que el proyecto se ejecuta con 'mvn spring-boot:run'
             steps {
-                // Ajusta el nombre del JAR según tu proyecto
-                bat "start java -jar target/springboot-facturacion-ult-0.0.1-SNAPSHOT.jar" 
-                sleep 15 // Espera a que el backend esté listo (ajusta según tu tiempo de arranque)
+                bat "start /B java -jar target/springboot-facturacion-ult-0.0.1-SNAPSHOT.jar"
+                sleep 15
             }
-        }
+}
+
 
 
         stage('Unit Tests') {
