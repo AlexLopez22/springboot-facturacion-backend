@@ -13,15 +13,15 @@ public class PersistenceConfig {
 
     @Bean
     public DataSource dataSource(DataSourceRegistry registry) {
-        // Datos central  de TIS_INTEGRADO
+        // Datos central de INTEGRACION
         DataSource defaultDs = DataSourceBuilder.create()
-                .url("jdbc:sqlserver://ALEXANDER:1433;databaseName=TIS_INTEGRADO;encrypt=false")
-                .username("springboot_user")
-                .password("P@$$w0rd")
-                .driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
+                .url("jdbc:postgresql://localhost:5432/INTEGRACION")
+                .username("postgres")
+                .password("admin")
+                .driverClassName("org.postgresql.Driver")
                 .build();
 
-        //Fuente de datos de enrutamiento 
+        // Fuente de datos de enrutamiento
         return new TenantRoutingDataSource(defaultDs, registry);
     }
 }

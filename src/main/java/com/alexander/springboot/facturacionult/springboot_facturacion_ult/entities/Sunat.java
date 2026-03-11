@@ -22,7 +22,6 @@ public class Sunat {
     
     private String estado;
 
-    @Lob
     private byte[] cdr;
         
     @Column(name = "fecha_envio")

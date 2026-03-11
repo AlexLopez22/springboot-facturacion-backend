@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "serie", schema = "dbo")
+@Table(name = "serie")
 public class Serie {
 
     @Id

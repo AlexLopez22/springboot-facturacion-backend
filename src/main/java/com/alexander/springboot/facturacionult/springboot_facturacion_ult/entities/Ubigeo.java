@@ -3,7 +3,7 @@ package com.alexander.springboot.facturacionult.springboot_facturacion_ult.entit
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ubigeo" ,schema = "dbo")
+@Table(name = "ubigeo" )
 public class Ubigeo {
 
     @Id

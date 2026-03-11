@@ -26,14 +26,19 @@ public class CompanyService {
 
     @PostConstruct
     public void init() {
+
         List<Company> empresas = empresaRepository.findAll();
+
         for (Company empresa : empresas) {
+
+            String dbName = empresa.getRuc();
+
             DataSource tenantDs = DataSourceBuilder.create()
-                .url("jdbc:sqlserver://localhost:1433;databaseName=" + empresa.getRuc() + ";encrypt=false")
-                .username("springboot_user")
-                .password("P@$$w0rd")
-                .driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-                .build();
+                    .driverClassName("org.postgresql.Driver")
+                    .url("jdbc:postgresql://localhost:5432/" + dbName)
+                    .username("postgres")
+                    .password("admin")
+                    .build();
 
             registry.addDataSource(empresa.getRuc(), tenantDs);
         }

@@ -10,9 +10,10 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
-    @Column(name = "empresa_ruc", nullable = false, length = 11)
-    private String empresaRuc;
+    
+    @ManyToOne
+    @JoinColumn(name = "empresa_id", nullable = false)
+    private Company empresa;
 
     @Column(name = "correo", nullable = false, unique = true, length = 150)
     private String correo;
@@ -28,8 +29,8 @@ public class UserAccount {
 
     }
 
-    public UserAccount(String empresaRuc, String correo, String contrasena, UserRole rol) {
-        this.empresaRuc = empresaRuc;
+    public UserAccount(Company empresaId, String correo, String contrasena, UserRole rol) {
+        this.empresa = empresaId;
         this.correo = correo;
         this.contrasena = contrasena;
         this.rol = rol;
@@ -41,14 +42,6 @@ public class UserAccount {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getEmpresaRuc() {
-        return empresaRuc;
-    }
-
-    public void setEmpresaRuc(String empresaRuc) {
-        this.empresaRuc = empresaRuc;
     }
 
     public String getCorreo() {
@@ -73,6 +66,14 @@ public class UserAccount {
 
     public void setRol(UserRole rol) {
         this.rol = rol;
+    }
+
+    public Company getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Company empresaId) {
+        this.empresa = empresaId;
     }
 
    

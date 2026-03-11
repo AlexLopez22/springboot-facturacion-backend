@@ -31,7 +31,7 @@ public class AuthController {
             String token = jwtUtil.generateToken(
                 u.getCorreo(),
                 u.getRol().getCodigo(),   // rol del usuario
-                u.getEmpresaRuc()         // tenant (RUC de la empresa)
+                u.getEmpresa().getRuc()         // tenant (RUC de la empresa)
             );
             return ResponseEntity.ok("{\"token\":\"" + token + "\"}");
         })

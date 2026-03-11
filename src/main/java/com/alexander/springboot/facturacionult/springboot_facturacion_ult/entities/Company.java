@@ -7,8 +7,11 @@ import jakarta.persistence.*;
 public class Company {
 
     @Id
-    @Column(name = "ruc", length = 11, nullable = false)
-    private String ruc;   // clave primaria
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "ruc", nullable = false, length = 255)
+    private String ruc;   
 
     @Column(name = "razon_social", nullable = false, length = 255)
     private String razonSocial;
@@ -22,11 +25,13 @@ public class Company {
     // Constructor vacío requerido por JPA
     public Company() {}
 
-    public Company(String ruc, String razonSocial, String direccion, String celular) {
+    public Company(Long id,String ruc, String razonSocial, String direccion, String celular) {
+        this.id = id;
         this.ruc = ruc;
         this.razonSocial = razonSocial;
         this.direccion = direccion;
         this.celular = celular;
+
     }
 
     public String getRuc() {
@@ -59,6 +64,14 @@ public class Company {
 
     public void setCelular(String celular) {
         this.celular = celular;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
    

@@ -8,24 +8,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- Cache de DataSources por tenantDb.
- Permite registrar manualmente (addDataSource) o construir dinámicamente (getDataSource).
+ * Cache de DataSources por tenantDb.
+ * Permite registrar manualmente (addDataSource) o construir dinámicamente
+ * (getDataSource).
  */
 @Component
 public class DataSourceRegistry {
 
     private final Map<String, DataSource> dataSources = new HashMap<>();
 
-    
-    //Registrar manualmente un DataSource para un tenant.
+    // Registrar manualmente un DataSource para un tenant.
     public void addDataSource(String tenantId, DataSource dataSource) {
         dataSources.put(tenantId, dataSource);
     }
 
     /**
-    Obtener el DataSource para un tenant.
-    Si no existe en cache, lo construye dinámicamente y lo guarda.
-    */
+     * Obtener el DataSource para un tenant.
+     * Si no existe en cache, lo construye dinámicamente y lo guarda.
+     */
     public DataSource getDataSource(String tenantId) {
         if (tenantId == null || tenantId.isBlank()) {
             return null;
@@ -38,10 +38,10 @@ public class DataSourceRegistry {
 
         // Construye un nuevo DataSource dinámicamente
         DataSource ds = DataSourceBuilder.create()
-                .driverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-                .url("jdbc:sqlserver://ALEXANDER:1433;databaseName=" + tenantId + ";encrypt=false")
-                .username("springboot_user")
-                .password("P@$$w0rd")
+                .driverClassName("org.postgresql.Driver")
+                .url("jdbc:postgresql://localhost:5432/" + tenantId)
+                .username("postgres")
+                .password("admin")
                 .build();
 
         // Lo guarda en cache
