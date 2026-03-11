@@ -17,6 +17,12 @@ public class DataSourceRegistry {
 
     private final Map<String, DataSource> dataSources = new HashMap<>();
 
+    // Variables de entorno (Railway)
+    private final String host = System.getenv("PGHOST");
+    private final String port = System.getenv("PGPORT");
+    private final String username = System.getenv("PGUSER");
+    private final String password = System.getenv("PGPASSWORD");
+
     // Registrar manualmente un DataSource para un tenant.
     public void addDataSource(String tenantId, DataSource dataSource) {
         dataSources.put(tenantId, dataSource);
@@ -37,11 +43,13 @@ public class DataSourceRegistry {
         }
 
         // Construye un nuevo DataSource dinámicamente
+        String url = "jdbc:postgresql://" + host + ":" + port + "/" + tenantId;
+
         DataSource ds = DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
-                .url("jdbc:postgresql://host:5432/" + tenantId)
-                .username("postgres")
-                .password("admin")
+                .url(url)
+                .username(username)
+                .password(password)
                 .build();
 
         // Lo guarda en cache

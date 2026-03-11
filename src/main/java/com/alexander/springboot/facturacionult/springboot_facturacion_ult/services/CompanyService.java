@@ -19,6 +19,12 @@ public class CompanyService {
     private final CompanyRepository empresaRepository;
     private final DataSourceRegistry registry;
 
+    // Variables de entorno (Railway)
+    private final String host = System.getenv("PGHOST");
+    private final String port = System.getenv("PGPORT");
+    private final String username = System.getenv("PGUSER");
+    private final String password = System.getenv("PGPASSWORD");
+
     public CompanyService(CompanyRepository empresaRepository, DataSourceRegistry registry) {
         this.empresaRepository = empresaRepository;
         this.registry = registry;
@@ -33,11 +39,13 @@ public class CompanyService {
 
             String dbName = empresa.getRuc();
 
+            String url = "jdbc:postgresql://" + host + ":" + port + "/" + dbName;
+
             DataSource tenantDs = DataSourceBuilder.create()
                     .driverClassName("org.postgresql.Driver")
-                    .url("jdbc:postgresql://host:5432/" + dbName)
-                    .username("postgres")
-                    .password("admin")
+                    .url(url)
+                    .username(username)
+                    .password(password)
                     .build();
 
             registry.addDataSource(empresa.getRuc(), tenantDs);
