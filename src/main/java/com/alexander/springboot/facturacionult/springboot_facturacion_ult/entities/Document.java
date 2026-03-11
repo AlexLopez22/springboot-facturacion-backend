@@ -9,8 +9,8 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "tipo_comprobante")
-    private String tipoComprobante;
+    @Column(name = "tipo_documento")
+    private String tipoDocumento;
 
     private String nombre;
 
@@ -25,12 +25,12 @@ public class Document {
         this.id = id;
     }
 
-    public String getTipoComprobante() {
-        return tipoComprobante;
+    public String getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public void setTipoComprobante(String tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     public String getNombre() {

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class InvoiceDTO { 
     private Long id;
-    private Integer tipoComprobante; 
+    private Integer tipoDocumento; 
     private Integer serie; 
     private String numero;
     private String moneda;
@@ -23,11 +23,11 @@ public class InvoiceDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    public Integer getTipoComprobante() {
-        return tipoComprobante;
+    public Integer getTipoDocumento() {
+        return tipoDocumento;
     }
-    public void setTipoComprobante(Integer tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
+    public void setTipoDocumento(Integer tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
     public Integer getSerie() {
         return serie;

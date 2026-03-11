@@ -51,8 +51,9 @@ public class SerieController {
 
         // Construir la respuesta con el nombre de la serie y el siguiente correlativo
         Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("id", serie.getId());
         respuesta.put("nombreSerie", serie.getNombreSerie());
-        respuesta.put("numero", numero);
+        respuesta.put("numeroPredeterminado", numero);
 
         return ResponseEntity.ok(respuesta);
     }

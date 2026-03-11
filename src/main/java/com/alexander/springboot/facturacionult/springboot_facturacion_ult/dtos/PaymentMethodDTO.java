@@ -6,6 +6,10 @@ public class PaymentMethodDTO {
     private Long id;
     private String tipo;
 
+    public PaymentMethodDTO(){
+
+    }
+
     public PaymentMethodDTO(Long id, String tipo) {
         this.id = id;
         this.tipo = tipo;

@@ -1,16 +1,18 @@
 Feature: Crear facturas - POST /invoices/create-invoices
 
-  Background:
+Background:
     * url baseUrl
+
+@smoke
+Scenario: Crear factura válida exitosamente
     * def auth = call read('classpath:karate/auth/get-token.feature') { correo: 'alopez22@gmail.com', contrasena: '12345678' }
     * def token = auth.token
     * header Authorization = 'Bearer ' + token
-    * print 'Token usado:', token
 
-  * def invoiceBase =
+    * def invoiceBase =
   """
   {
-    "tipoComprobante": 1,
+    "tipoDocumento": 1,
     "serie": 24,
     "numero": "00000010",
     "moneda": "PEN",
@@ -59,19 +61,14 @@ Feature: Crear facturas - POST /invoices/create-invoices
   }
   """
 
-
-  @smoke
-  Scenario: Crear factura válida exitosamente
     Given path '/invoices/create-invoices'
     And request invoiceBase
     When method POST
     Then status 200
-    And match responseStatus != 401
 
-  Scenario: Crear factura sin token retorna 401 o 403
-    Given path '/invoices/create-invoices'
+@negative
+Scenario: Acceso sin token retorna 401 o 403
+    Given path '/invoices/list-invoices'
     And header Authorization = ''
-    And request invoiceBase
-    When method POST
-    Then match responseStatus != 200
-    
+    When method GET
+    Then match [401,403] contains responseStatus

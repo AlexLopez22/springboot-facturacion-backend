@@ -36,6 +36,8 @@ public class SecurityConfig {
                         .requestMatchers("/ubigeos").permitAll()// Permitir acceso a la ruta sin necesidad de estar autenticado
                         .requestMatchers("/clients/create-client").authenticated()  // Permitir acceso a la ruta de creación de clientes solo para usuarios autenticados 
                         .requestMatchers("/invoices/**").authenticated()// Permitir acceso a la ruta de creación de facturas solo para usuarios autenticados
+                        .requestMatchers("/formas-pago/**").authenticated()
+                        .requestMatchers("/products/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

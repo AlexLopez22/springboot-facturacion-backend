@@ -23,6 +23,11 @@ public class Serie {
     @Column(name = "es_predeterminada")
     private boolean predeterminada;
 
+    public Serie(){
+        
+    }
+    
+
     public Integer getId() {
         return id;
     }

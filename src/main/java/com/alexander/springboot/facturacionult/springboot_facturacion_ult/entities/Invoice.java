@@ -14,8 +14,8 @@ public class Invoice {
     private Long id;
 
    @ManyToOne
-    @JoinColumn(name = "tipo_comprobante_id", nullable = false)
-    private Document tipoComprobante;
+    @JoinColumn(name = "tipo_documento_id", nullable = false)
+    private Document tipoDocumento;
 
 
     @ManyToOne 
@@ -79,11 +79,11 @@ public class Invoice {
         this.id = id;
     }
 
-    public Document getTipoComprobante() {
-        return tipoComprobante;
+    public Document getTipoDocumento() {
+        return tipoDocumento;
     }
-    public void setTipoComprobante(Document tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
+    public void setTipoDocumento(Document tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     public Serie getSerie() {

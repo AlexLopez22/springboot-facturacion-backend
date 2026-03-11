@@ -40,8 +40,8 @@ public class InvoiceService {
                 .map(inv -> {
                     InvoiceFullDTO dto = new InvoiceFullDTO();
                     dto.setId(inv.getId());
-                    dto.setTipoComprobante(
-                            inv.getTipoComprobante() != null ? inv.getTipoComprobante().getNombre() : null);
+                    dto.setTipoDocumento(
+                            inv.getTipoDocumento() != null ? inv.getTipoDocumento().getNombre() : null);
                     dto.setSerie(inv.getSerie() != null ? inv.getSerie().getNombreSerie() : null);
                     dto.setNumero(inv.getNumero());
                     dto.setMoneda(inv.getMoneda());
@@ -79,7 +79,7 @@ public class InvoiceService {
 
         InvoiceFullDTO dto = new InvoiceFullDTO();
         dto.setId(inv.getId());
-        dto.setTipoComprobante(inv.getTipoComprobante() != null ? inv.getTipoComprobante().getNombre() : null);
+        dto.setTipoDocumento(inv.getTipoDocumento() != null ? inv.getTipoDocumento().getNombre() : null);
         dto.setSerie(inv.getSerie() != null ? inv.getSerie().getNombreSerie() : null);
         dto.setNumero(inv.getNumero());
         dto.setMoneda(inv.getMoneda());
@@ -118,9 +118,9 @@ public class InvoiceService {
 
         // 2. Crear comprobante
         Invoice invoice = new Invoice();
-        Document documento = documentRepository.findById(dto.getTipoComprobante())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de comprobante no encontrado"));
-        invoice.setTipoComprobante(documento);
+        Document documento = documentRepository.findById(dto.getTipoDocumento())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de documento no encontrado"));
+        invoice.setTipoDocumento(documento);
 
         Serie serie = serieRepository.findById(dto.getSerie())
     .orElseThrow(() -> new RuntimeException("La serie '" + dto.getSerie() + "' no existe"));

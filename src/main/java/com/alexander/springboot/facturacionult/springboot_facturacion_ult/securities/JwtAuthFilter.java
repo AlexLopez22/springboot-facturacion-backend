@@ -32,59 +32,65 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-@Override
-protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                @NonNull HttpServletResponse response,
-                                @NonNull FilterChain chain)
-        throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain chain)
+            throws ServletException, IOException {
 
-    System.out.println("JwtAuthFilter ejecutándose para: " + request.getRequestURI());
+        System.out.println("JwtAuthFilter ejecutándose para: " + request.getRequestURI());
+        String uri = request.getRequestURI();
 
-    String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (header != null && header.startsWith("Bearer ")) {
-        String token = header.substring(7);
-
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String username = claims.getSubject();
-            String role = claims.get("rol", String.class); // clave correcta
-            String tenantDb = claims.get("tenantDb", String.class);
-
-            // Construimos la lista de autoridades correctamente
-            List<SimpleGrantedAuthority> authorities =
-                    List.of(new SimpleGrantedAuthority("ROLE_" + role));
-
-            // Creamos el objeto de autenticación
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-            // Marcamos como autenticado
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            // Guardamos tenant en request y en TenantContext
-            request.setAttribute("tenantDb", tenantDb);
-            TenantContext.setTenant(tenantDb);
-
-            // Seteamos el SecurityContext
-            org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(auth);
-
-        } catch (JwtException e) {
-            System.out.println("Token inválido: " + e.getMessage());
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
+        // Rutas públicas: no validar token
+        if (uri.startsWith("/auth/") || uri.startsWith("/api/auth/")) {
+            chain.doFilter(request, response);
             return;
         }
-    }
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            try {
+                Claims claims = Jwts.parserBuilder()
+                        .setSigningKey(key)
+                        .build()
+                        .parseClaimsJws(token)
+                        .getBody();
 
-    try {
-        chain.doFilter(request, response);
-    } finally {
-        TenantContext.clear();
+                String username = claims.getSubject();
+                String role = claims.get("role", String.class); // clave correcta
+                String tenantDb = claims.get("tenantDb", String.class);
+
+                // Construimos la lista de autoridades correctamente
+                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
+                // Creamos el objeto de autenticación
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null,
+                        authorities);
+
+                // Marcamos como autenticado
+                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                // Guardamos tenant en request y en TenantContext
+                request.setAttribute("tenantDb", tenantDb);
+                TenantContext.setTenant(tenantDb);
+
+                // Seteamos el SecurityContext
+                org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(auth);
+
+            } catch (JwtException e) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
+                return;
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token requerido");
+            return;
+        }
+
+        try {
+            chain.doFilter(request, response);
+        } finally {
+            TenantContext.clear();
+        }
     }
-}
 
 }

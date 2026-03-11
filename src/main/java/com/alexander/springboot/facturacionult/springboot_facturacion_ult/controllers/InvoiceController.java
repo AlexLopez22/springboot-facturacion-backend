@@ -22,8 +22,7 @@ public class InvoiceController {
     @GetMapping("/list-invoices")
     public ResponseEntity<List<InvoiceFullDTO>> listInvoices() {
         return ResponseEntity.ok(invoiceService.listInvoices());
-}
-
+    }
 
     @GetMapping("/list-invoices/{id}")
     public ResponseEntity<InvoiceFullDTO> listInvoiceById(@PathVariable Long id) {
@@ -35,4 +34,5 @@ public class InvoiceController {
         InvoiceFullDTO created = invoiceService.createInvoice(dto);
         return ResponseEntity.ok(created);
     }
+
 }
