@@ -7,52 +7,36 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Cache de DataSources por tenantDb.
- * Permite registrar manualmente (addDataSource) o construir dinámicamente
- * (getDataSource).
- */
 @Component
 public class DataSourceRegistry {
 
     private final Map<String, DataSource> dataSources = new HashMap<>();
 
-    // Variables de entorno (Railway)
-    private final String host = System.getenv("PGHOST");
-    private final String port = System.getenv("PGPORT");
-    private final String username = System.getenv("PGUSER");
-    private final String password = System.getenv("PGPASSWORD");
+    // Railway proporciona esta variable automáticamente
+    private final String databaseUrl = System.getenv("DATABASE_URL");
 
-    // Registrar manualmente un DataSource para un tenant.
     public void addDataSource(String tenantId, DataSource dataSource) {
         dataSources.put(tenantId, dataSource);
     }
 
-    /**
-     * Obtener el DataSource para un tenant.
-     * Si no existe en cache, lo construye dinámicamente y lo guarda.
-     */
     public DataSource getDataSource(String tenantId) {
+
         if (tenantId == null || tenantId.isBlank()) {
             return null;
         }
 
-        // Si ya existe en cache, lo devuelve
         if (dataSources.containsKey(tenantId)) {
             return dataSources.get(tenantId);
         }
 
-        // Construye un nuevo DataSource dinámicamente
-        String url = "jdbc:postgresql://" + host + ":" + port + "/" + tenantId;
+        // Cambia solo el nombre de la base de datos por el RUC
+        String url = databaseUrl.replaceFirst("/[^/]*$", "/" + tenantId);
 
         DataSource ds = DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
                 .url(url)
-                .username(username)
-                .password(password)
                 .build();
 
-        // Lo guarda en cache
         dataSources.put(tenantId, ds);
 
         return ds;
