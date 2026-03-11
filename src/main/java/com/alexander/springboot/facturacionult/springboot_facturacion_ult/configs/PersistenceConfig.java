@@ -15,7 +15,7 @@ public class PersistenceConfig {
     public DataSource dataSource(DataSourceRegistry registry) {
         // Datos central de INTEGRACION
         DataSource defaultDs = DataSourceBuilder.create()
-                .url("jdbc:postgresql://localhost:5432/INTEGRACION")
+                .url("jdbc:postgresql://host:5432/INTEGRACION")
                 .username("postgres")
                 .password("admin")
                 .driverClassName("org.postgresql.Driver")

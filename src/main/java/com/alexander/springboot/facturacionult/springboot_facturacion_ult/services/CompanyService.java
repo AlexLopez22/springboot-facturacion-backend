@@ -35,7 +35,7 @@ public class CompanyService {
 
             DataSource tenantDs = DataSourceBuilder.create()
                     .driverClassName("org.postgresql.Driver")
-                    .url("jdbc:postgresql://localhost:5432/" + dbName)
+                    .url("jdbc:postgresql://host:5432/" + dbName)
                     .username("postgres")
                     .password("admin")
                     .build();

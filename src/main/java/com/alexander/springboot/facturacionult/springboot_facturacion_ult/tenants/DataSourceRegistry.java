@@ -39,7 +39,7 @@ public class DataSourceRegistry {
         // Construye un nuevo DataSource dinámicamente
         DataSource ds = DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
-                .url("jdbc:postgresql://localhost:5432/" + tenantId)
+                .url("jdbc:postgresql://host:5432/" + tenantId)
                 .username("postgres")
                 .password("admin")
                 .build();
