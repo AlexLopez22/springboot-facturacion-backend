@@ -12,8 +12,11 @@ public class DataSourceRegistry {
 
     private final Map<String, DataSource> dataSources = new HashMap<>();
 
-    // Railway proporciona esta variable automáticamente
-    private final String databaseUrl = System.getenv("DATABASE_URL");
+    private final String databaseUrl =
+        "jdbc:postgresql://" +
+        System.getenv("PGHOST") + ":" +
+        System.getenv("PGPORT") + "/" +
+        System.getenv("PGDATABASE");
 
     public void addDataSource(String tenantId, DataSource dataSource) {
         dataSources.put(tenantId, dataSource);

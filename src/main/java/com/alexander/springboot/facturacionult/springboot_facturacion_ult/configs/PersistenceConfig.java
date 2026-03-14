@@ -13,15 +13,20 @@ public class PersistenceConfig {
 
     @Bean
     public DataSource dataSource(DataSourceRegistry registry) {
-        // Datos central de INTEGRACION
+
+        String host = System.getenv("PGHOST");
+        String port = System.getenv("PGPORT");
+        String db = System.getenv("PGDATABASE");
+        String user = System.getenv("PGUSER");
+        String pass = System.getenv("PGPASSWORD");
+
         DataSource defaultDs = DataSourceBuilder.create()
-                .url("jdbc:postgresql://host:5432/INTEGRACION")
-                .username("postgres")
-                .password("admin")
+                .url("jdbc:postgresql://" + host + ":" + port + "/" + db)
+                .username(user)
+                .password(pass)
                 .driverClassName("org.postgresql.Driver")
                 .build();
 
-        // Fuente de datos de enrutamiento
         return new TenantRoutingDataSource(defaultDs, registry);
     }
 }

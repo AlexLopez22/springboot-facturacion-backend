@@ -53,6 +53,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        //Activar esto cuandos esuba el frondend en la nube
+        //  configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        // Y comentar la linea de abajo , ya que funciona localmente
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:8080"));// el  frontend
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));

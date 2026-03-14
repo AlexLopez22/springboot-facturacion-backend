@@ -33,12 +33,15 @@ public class CompanyService {
     @PostConstruct
     public void init() {
 
+        if (host == null || port == null) {
+            throw new RuntimeException("Variables de entorno PGHOST o PGPORT no encontradas");
+        }
+
         List<Company> empresas = empresaRepository.findAll();
 
         for (Company empresa : empresas) {
 
             String dbName = empresa.getRuc();
-
             String url = "jdbc:postgresql://" + host + ":" + port + "/" + dbName;
 
             DataSource tenantDs = DataSourceBuilder.create()
