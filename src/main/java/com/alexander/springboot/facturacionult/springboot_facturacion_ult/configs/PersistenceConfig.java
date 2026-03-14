@@ -17,11 +17,11 @@ public class PersistenceConfig {
         String databaseUrl = System.getenv("DATABASE_URL");
 
         if (databaseUrl == null) {
-            throw new RuntimeException("DATABASE_URL no encontrada en Railway");
+            throw new RuntimeException("DATABASE_URL no encontrada");
         }
 
-        databaseUrl = databaseUrl.replace("postgres://", "jdbc:postgresql://");
-
+        
+        databaseUrl = databaseUrl.replace("postgresql://", "jdbc:postgresql://");
         DataSource defaultDs = DataSourceBuilder.create()
                 .url(databaseUrl)
                 .driverClassName("org.postgresql.Driver")
