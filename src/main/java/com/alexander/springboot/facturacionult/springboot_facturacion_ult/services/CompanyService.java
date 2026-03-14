@@ -20,8 +20,7 @@ public class CompanyService {
     private final DataSourceRegistry registry;
 
     // Variables de entorno (Railway)
-    private final String host = System.getenv("PGHOST");
-    private final String port = System.getenv("PGPORT");
+   private final String databaseUrl = System.getenv("DATABASE_URL");
     private final String username = System.getenv("PGUSER");
     private final String password = System.getenv("PGPASSWORD");
 
@@ -33,8 +32,8 @@ public class CompanyService {
     @PostConstruct
     public void init() {
 
-        if (host == null || port == null) {
-            throw new RuntimeException("Variables de entorno PGHOST o PGPORT no encontradas");
+        if (databaseUrl == null || databaseUrl == null) {
+            throw new RuntimeException("Variables de entorno DATABASE_URLno encontradas");
         }
 
         List<Company> empresas = empresaRepository.findAll();
@@ -42,7 +41,7 @@ public class CompanyService {
         for (Company empresa : empresas) {
 
             String dbName = empresa.getRuc();
-            String url = "jdbc:postgresql://" + host + ":" + port + "/" + dbName;
+            String url = databaseUrl.replaceFirst("/[^/]*$", "/" + dbName);
 
             DataSource tenantDs = DataSourceBuilder.create()
                     .driverClassName("org.postgresql.Driver")
