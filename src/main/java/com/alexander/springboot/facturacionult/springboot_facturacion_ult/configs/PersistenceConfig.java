@@ -14,17 +14,19 @@ public class PersistenceConfig {
     @Bean
     public DataSource dataSource(DataSourceRegistry registry) {
 
-        String databaseUrl = System.getenv("DATABASE_URL");
+        String host = System.getenv("PGHOST");
+        String port = System.getenv("PGPORT");
+        String db = System.getenv("PGDATABASE");
+        String user = System.getenv("PGUSER");
+        String password = System.getenv("PGPASSWORD");
 
-        if (databaseUrl == null) {
-            throw new RuntimeException("DATABASE_URL no encontrada");
-        }
+        String url = "jdbc:postgresql://" + host + ":" + port + "/" + db;
 
-        
-        databaseUrl = databaseUrl.replace("postgresql://", "jdbc:postgresql://");
         DataSource defaultDs = DataSourceBuilder.create()
-                .url(databaseUrl)
                 .driverClassName("org.postgresql.Driver")
+                .url(url)
+                .username(user)
+                .password(password)
                 .build();
 
         return new TenantRoutingDataSource(defaultDs, registry);
