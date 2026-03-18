@@ -87,107 +87,108 @@ public class InvoiceService {
         return dto;
     }
 
-    // Crear factura
-    @Transactional
-    public InvoiceFullDTO createInvoice(InvoiceDTO dto) {
-        // 1. Crear registro en SUNAT con estado pendiente
-        Sunat sunat = new Sunat();
-        sunat.setEstado("PENDIENTE");
-        sunat.setHashCpe(null);
-        sunat.setCdr(null);
-        sunat.setFechaEnvio(null);
+   // Crear factura
+@Transactional
+public InvoiceFullDTO createInvoice(InvoiceDTO dto) {
 
-        // 2. Crear comprobante
-        Invoice invoice = new Invoice();
-        Document documento = documentRepository.findById(dto.getTipoDocumento())
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de documento no encontrado"));
-        invoice.setTipoDocumento(documento);
+    // 1. Crear comprobante PRIMERO
+    Invoice invoice = new Invoice();
 
-        Serie serie = serieRepository.findById(dto.getSerie())
-                .orElseThrow(() -> new RuntimeException("La serie '" + dto.getSerie() + "' no existe"));
-        invoice.setSerie(serie);
+    Document documento = documentRepository.findById(dto.getTipoDocumento())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de documento no encontrado"));
+    invoice.setTipoDocumento(documento);
 
-        invoice.setNumero(dto.getNumero());
-        invoice.setMoneda(dto.getMoneda());
-        invoice.setTipoOperacion(dto.getTipoOperacion());
+    Serie serie = serieRepository.findById(dto.getSerie())
+            .orElseThrow(() -> new RuntimeException("La serie '" + dto.getSerie() + "' no existe"));
+    invoice.setSerie(serie);
 
-        invoice.setFechaEmision(LocalDate.parse(dto.getFechaEmision()));
-        invoice.setHoraEmision(LocalTime.parse(dto.getHoraEmision()));
+    invoice.setNumero(dto.getNumero());
+    invoice.setMoneda(dto.getMoneda());
+    invoice.setTipoOperacion(dto.getTipoOperacion());
 
-        // 3. Relacionar cliente, emisor y forma de pago
-        Client client = clientRepository.findById(dto.getClienteId())
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        invoice.setCliente(client);
+    invoice.setFechaEmision(LocalDate.parse(dto.getFechaEmision()));
+    invoice.setHoraEmision(LocalTime.parse(dto.getHoraEmision()));
 
-        Issuer issuer = issuerRepository.findById(dto.getEmisorId())
-                .orElseThrow(() -> new RuntimeException("Emisor no encontrado"));
-        invoice.setEmisor(issuer);
+    // 2. Crear SUNAT (ahora sí correctamente)
+    Sunat sunat = new Sunat();
+    sunat.setEstado("PENDIENTE");
+    sunat.setHashCpe(null);
+    sunat.setCdr(null);
+    sunat.setFechaEnvio(null);
 
-        if (dto.getFormaPagoId() != null) {
-            PaymentMethod pm = paymentMethodRepository.findById(dto.getFormaPagoId())
-                    .orElseThrow(() -> new RuntimeException("Forma de pago no encontrada"));
-            invoice.setFormaPago(pm);
-        }
+    // 🔥 RELACIÓN CORRECTA
+    sunat.setInvoice(invoice);
+    invoice.setSunat(sunat);
 
-        // 4. Totales
-        if (dto.getTotales() != null) {
-            Totales totales = new Totales();
-            totales.setOpGravada(dto.getTotales().getOpGravada());
-            totales.setOpExonerada(dto.getTotales().getOpExonerada());
-            totales.setOpInafecta(dto.getTotales().getOpInafecta());
-            totales.setOpGratuita(dto.getTotales().getOpGratuita());
-            totales.setIgv(dto.getTotales().getIgv());
-            totales.setTotalImpuestos(dto.getTotales().getTotalImpuestos());
-            totales.setImporteTotal(dto.getTotales().getImporteTotal());
-            invoice.setTotales(totales);
-        }
+    // 3. Relacionar cliente, emisor y forma de pago
+    Client client = clientRepository.findById(dto.getClienteId())
+            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+    invoice.setCliente(client);
 
-        // 5. Items
-        if (dto.getItems() != null) {
-            List<InvoiceDetail> details = dto.getItems().stream().map(d -> {
-                InvoiceDetail detail = new InvoiceDetail();
-                Product product = new Product();
-                product.setId(d.getProductoId());
-                detail.setProducto(product);
-                detail.setItem(d.getItem());
-                detail.setCodigoProducto(d.getCodigoProducto());
-                detail.setDescripcion(d.getDescripcion());
-                detail.setCantidad(d.getCantidad());
-                detail.setUnidadMedida(d.getUnidadMedida());
-                detail.setPrecioUnitario(d.getPrecioUnitario());
-                detail.setValorUnitario(d.getValorUnitario());
-                detail.setValorVenta(d.getValorVenta());
-                detail.setAfectacionIgv(d.getAfectacionIgv());
-                detail.setImporteTotal(d.getImporteTotal());
-                detail.setInvoice(invoice);
-                return detail;
-            }).toList();
-            invoice.setItems(details);
-        }
+    Issuer issuer = issuerRepository.findById(dto.getEmisorId())
+            .orElseThrow(() -> new RuntimeException("Emisor no encontrado"));
+    invoice.setEmisor(issuer);
 
-        // 6. Cuotas (solo si forma de pago es crédito)
-        if (dto.getCuotas() != null && !dto.getCuotas().isEmpty()) {
-            List<Installment> installments = dto.getCuotas().stream().map(c -> {
-                Installment inst = new Installment();
-                inst.setNumeroCuota(c.getNumeroCuota());
-                inst.setFechaVencimiento(LocalDate.parse(c.getFechaVencimiento()));
-                inst.setImporte(c.getImporte());
-                inst.setInvoice(invoice);
-                return inst;
-            }).toList();
-            invoice.setCuotas(installments);
-        }
-
-        // 7. Asociar comprobante con el registro SUNAT
-        invoice.setSunat(sunat);
-
-        // 8. Guardar comprobante (Hibernate insertará primero Sunat y luego Invoice)
-        Invoice saved = invoiceRepository.save(invoice);
-
-        return listInvoiceById(saved.getId());
+    if (dto.getFormaPagoId() != null) {
+        PaymentMethod pm = paymentMethodRepository.findById(dto.getFormaPagoId())
+                .orElseThrow(() -> new RuntimeException("Forma de pago no encontrada"));
+        invoice.setFormaPago(pm);
     }
 
+    // 4. Totales
+    if (dto.getTotales() != null) {
+        Totales totales = new Totales();
+        totales.setOpGravada(dto.getTotales().getOpGravada());
+        totales.setOpExonerada(dto.getTotales().getOpExonerada());
+        totales.setOpInafecta(dto.getTotales().getOpInafecta());
+        totales.setOpGratuita(dto.getTotales().getOpGratuita());
+        totales.setIgv(dto.getTotales().getIgv());
+        totales.setTotalImpuestos(dto.getTotales().getTotalImpuestos());
+        totales.setImporteTotal(dto.getTotales().getImporteTotal());
+        invoice.setTotales(totales);
+    }
+
+    // 5. Items
+    if (dto.getItems() != null) {
+        List<InvoiceDetail> details = dto.getItems().stream().map(d -> {
+            InvoiceDetail detail = new InvoiceDetail();
+            Product product = new Product();
+            product.setId(d.getProductoId());
+            detail.setProducto(product);
+            detail.setItem(d.getItem());
+            detail.setCodigoProducto(d.getCodigoProducto());
+            detail.setDescripcion(d.getDescripcion());
+            detail.setCantidad(d.getCantidad());
+            detail.setUnidadMedida(d.getUnidadMedida());
+            detail.setPrecioUnitario(d.getPrecioUnitario());
+            detail.setValorUnitario(d.getValorUnitario());
+            detail.setValorVenta(d.getValorVenta());
+            detail.setAfectacionIgv(d.getAfectacionIgv());
+            detail.setImporteTotal(d.getImporteTotal());
+            detail.setInvoice(invoice);
+            return detail;
+        }).toList();
+        invoice.setItems(details);
+    }
+
+    // 6. Cuotas
+    if (dto.getCuotas() != null && !dto.getCuotas().isEmpty()) {
+        List<Installment> installments = dto.getCuotas().stream().map(c -> {
+            Installment inst = new Installment();
+            inst.setNumeroCuota(c.getNumeroCuota());
+            inst.setFechaVencimiento(LocalDate.parse(c.getFechaVencimiento()));
+            inst.setImporte(c.getImporte());
+            inst.setInvoice(invoice);
+            return inst;
+        }).toList();
+        invoice.setCuotas(installments);
+    }
+
+    // 7. Guardar
+    Invoice saved = invoiceRepository.save(invoice);
+
+    return listInvoiceById(saved.getId());
+}
     public int obtenerSiguienteNumero(String nombreSerie) {
         return invoiceRepository
                 .findTopBySerie_NombreSerieOrderByNumeroDesc(nombreSerie)

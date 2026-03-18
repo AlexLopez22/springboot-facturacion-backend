@@ -17,7 +17,6 @@ public class Invoice {
     @JoinColumn(name = "tipo_documento_id", nullable = false)
     private Document tipoDocumento;
 
-
     @ManyToOne 
     @JoinColumn(name = "serie_id", nullable = false) 
     private Serie serie;

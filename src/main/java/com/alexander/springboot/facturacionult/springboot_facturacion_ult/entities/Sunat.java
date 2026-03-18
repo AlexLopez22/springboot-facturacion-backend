@@ -28,6 +28,7 @@ public class Sunat {
 
     @OneToOne(mappedBy = "sunat")
     private Invoice invoice;
+    @OneToOne(mappedBy = "sunat")
 
     public Long getId() {
         return id;
