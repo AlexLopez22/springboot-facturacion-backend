@@ -2,7 +2,6 @@ package com.alexander.springboot.facturacionult.springboot_facturacion_ult.servi
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.Document;

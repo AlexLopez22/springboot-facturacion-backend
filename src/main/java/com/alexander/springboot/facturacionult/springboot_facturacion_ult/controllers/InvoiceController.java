@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.InvoiceDTO;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.InvoiceFullDTO;
+import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.InvoiceListDTO;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.services.InvoiceService;
 
 @RestController
@@ -20,8 +21,8 @@ public class InvoiceController {
     }
 
     @GetMapping("/list-invoices")
-    public ResponseEntity<List<InvoiceFullDTO>> listInvoices() {
-        return ResponseEntity.ok(invoiceService.listInvoices());
+    public ResponseEntity<List<InvoiceListDTO>> listInvoicesTable() {
+        return ResponseEntity.ok(invoiceService.listInvoicesTable());
     }
 
     @GetMapping("/list-invoices/{id}")

@@ -1,5 +1,6 @@
 package com.alexander.springboot.facturacionult.springboot_facturacion_ult.services;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.util.List;
 
@@ -33,42 +34,22 @@ public class InvoiceService {
         this.documentRepository = documentRepository;
     }
 
-    // Listar factura
     @Transactional(readOnly = true)
-    public List<InvoiceFullDTO> listInvoices() {
+    public List<InvoiceListDTO> listInvoicesTable() {
         return invoiceRepository.findAll().stream()
                 .map(inv -> {
-                    InvoiceFullDTO dto = new InvoiceFullDTO();
-                    dto.setId(inv.getId());
-                    dto.setTipoDocumento(
-                            inv.getTipoDocumento() != null ? inv.getTipoDocumento().getNombre() : null);
-                    dto.setSerie(inv.getSerie() != null ? inv.getSerie().getNombreSerie() : null);
-                    dto.setNumero(inv.getNumero());
-                    dto.setMoneda(inv.getMoneda());
-                    dto.setTipoOperacion(inv.getTipoOperacion());
-                    dto.setFechaEmision(inv.getFechaEmision() != null ? inv.getFechaEmision().toString() : null);
-                    dto.setHoraEmision(inv.getHoraEmision() != null ? inv.getHoraEmision().toString() : null);
-
-                    // constructores de los DTOs
-                    dto.setCliente(new ClientDTO(inv.getCliente()));
-                    dto.setEmisor(new IssuerDTO(inv.getEmisor()));
-
-                    if (inv.getFormaPago() != null) {
-                        dto.setFormaPago(new PaymentMethodDTO(inv.getFormaPago()));
-                    }
-                    if (inv.getTotales() != null) {
-                        dto.setTotales(new TotalesDTO(inv.getTotales()));
-                    }
-                    if (inv.getItems() != null) {
-                        dto.setItems(inv.getItems().stream().map(InvoiceDetailDTO::new).toList());
-                    }
-                    if (inv.getCuotas() != null) {
-                        dto.setCuotas(inv.getCuotas().stream().map(InstallmentDTO::new).toList());
-                    }
-
-                    return dto;
-                })
-                .toList();
+                    String numeroDoc = inv.getCliente() != null ? inv.getCliente().getNumeroDocumento() : "";
+                    String nombreCliente = inv.getCliente() != null ? inv.getCliente().getRazonSocial() : "";
+                    BigDecimal igv = inv.getTotales() != null ? inv.getTotales().getIgv() : BigDecimal.ZERO;
+                    BigDecimal total = inv.getTotales() != null ? inv.getTotales().getImporteTotal() : BigDecimal.ZERO;
+                    return new InvoiceListDTO(
+                            inv.getId(),
+                            inv.getFechaEmision() != null ? inv.getFechaEmision().toString() : "",
+                            inv.getTipoDocumento() != null ? inv.getTipoDocumento().getNombre() : "",
+                            inv.getSerie() != null ? inv.getSerie().getNombreSerie() : "",
+                            inv.getNumero(),
+                            numeroDoc, nombreCliente, igv, total, "ACEPTADO", null);
+                }).toList();
     }
 
     // Obtener factura completa por ID
@@ -111,7 +92,7 @@ public class InvoiceService {
     public InvoiceFullDTO createInvoice(InvoiceDTO dto) {
         // 1. Crear registro en SUNAT con estado pendiente
         Sunat sunat = new Sunat();
-        sunat.setEstado("PENDIENTE"); 
+        sunat.setEstado("PENDIENTE");
         sunat.setHashCpe(null);
         sunat.setCdr(null);
         sunat.setFechaEnvio(null);
@@ -119,11 +100,12 @@ public class InvoiceService {
         // 2. Crear comprobante
         Invoice invoice = new Invoice();
         Document documento = documentRepository.findById(dto.getTipoDocumento())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de documento no encontrado"));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de documento no encontrado"));
         invoice.setTipoDocumento(documento);
 
         Serie serie = serieRepository.findById(dto.getSerie())
-    .orElseThrow(() -> new RuntimeException("La serie '" + dto.getSerie() + "' no existe"));
+                .orElseThrow(() -> new RuntimeException("La serie '" + dto.getSerie() + "' no existe"));
         invoice.setSerie(serie);
 
         invoice.setNumero(dto.getNumero());
@@ -147,7 +129,7 @@ public class InvoiceService {
                     .orElseThrow(() -> new RuntimeException("Forma de pago no encontrada"));
             invoice.setFormaPago(pm);
         }
-        
+
         // 4. Totales
         if (dto.getTotales() != null) {
             Totales totales = new Totales();
