@@ -28,11 +28,9 @@ public class Sunat {
     private LocalDateTime fechaEnvio;
 
    @OneToOne
-    @JoinColumn(name = "comprobante_id", referencedColumnName = "idComprobante")
+    @JoinColumn(name = "comprobante_id", referencedColumnName = "id")
     private Invoice invoice;
     
-    @OneToOne(mappedBy = "sunat")
-
     public Long getId() {
         return id;
     }
