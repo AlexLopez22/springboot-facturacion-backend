@@ -42,13 +42,15 @@ public class InvoiceService {
                     String nombreCliente = inv.getCliente() != null ? inv.getCliente().getRazonSocial() : "";
                     BigDecimal igv = inv.getTotales() != null ? inv.getTotales().getIgv() : BigDecimal.ZERO;
                     BigDecimal total = inv.getTotales() != null ? inv.getTotales().getImporteTotal() : BigDecimal.ZERO;
+                    String estado = inv.getSunat() != null ? inv.getSunat().getEstado() : "PENDIENTE";
+                    byte[] pdf = inv.getSunat() != null ? inv.getSunat().getCdr() : null;
                     return new InvoiceListDTO(
                             inv.getId(),
                             inv.getFechaEmision() != null ? inv.getFechaEmision().toString() : "",
                             inv.getTipoDocumento() != null ? inv.getTipoDocumento().getNombre() : "",
                             inv.getSerie() != null ? inv.getSerie().getNombreSerie() : "",
                             inv.getNumero(),
-                            numeroDoc, nombreCliente, igv, total, "ACEPTADO", null);
+                            numeroDoc, nombreCliente, igv, total, estado, pdf);
                 }).toList();
     }
 

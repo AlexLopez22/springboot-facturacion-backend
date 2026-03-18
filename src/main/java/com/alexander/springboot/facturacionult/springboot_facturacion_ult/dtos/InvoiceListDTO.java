@@ -14,12 +14,13 @@ public class InvoiceListDTO {
     private BigDecimal igv;
     private BigDecimal total;
     private String estado;
-    private String pdf;
+    private byte[]  pdf;
 
-    public InvoiceListDTO(Long id, String fecha, String documento, String serie,
-                          String correlativo, String numeroDocumentoCliente,
-                          String clienteNombre, BigDecimal igv, BigDecimal total,
-                          String estado, String pdf) {
+ 
+    
+    public InvoiceListDTO(Long id, String fecha, String documento, String serie, String correlativo,
+            String numeroDocumentoCliente, String clienteNombre, BigDecimal igv, BigDecimal total, String estado,
+            byte[] pdf) {
         this.id = id;
         this.fecha = fecha;
         this.documento = documento;
@@ -113,12 +114,13 @@ public class InvoiceListDTO {
         this.estado = estado;
     }
 
-    public String getPdf() {
+    public byte[] getPdf() {
         return pdf;
     }
 
-    public void setPdf(String pdf) {
+    public void setPdf(byte[] pdf) {
         this.pdf = pdf;
     }
+
 
 }

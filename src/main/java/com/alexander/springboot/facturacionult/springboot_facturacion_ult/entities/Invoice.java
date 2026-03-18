@@ -68,6 +68,8 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true) 
     private List<Installment> cuotas;
 
+    @Column(name = "pdf_url")
+    private byte[] pdf;
 
     public Long getId() {
         return id;
@@ -203,6 +205,16 @@ public class Invoice {
     public void setCuotas(List<Installment> cuotas) {
         this.cuotas = cuotas;
     }
+
+    public byte[] getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(byte[] pdf) {
+        this.pdf = pdf;
+    }
+
+   
 
 
 
