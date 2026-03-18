@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -26,8 +27,10 @@ public class Sunat {
     @Column(name = "fecha_envio")
     private LocalDateTime fechaEnvio;
 
-    @OneToOne(mappedBy = "sunat")
+   @OneToOne
+    @JoinColumn(name = "comprobante_id", referencedColumnName = "idComprobante")
     private Invoice invoice;
+    
     @OneToOne(mappedBy = "sunat")
 
     public Long getId() {

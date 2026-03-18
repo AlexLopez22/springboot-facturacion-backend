@@ -62,8 +62,7 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
     private List<Legend> leyendas;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sunat_id")
+    @OneToOne(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private Sunat sunat;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true) 
