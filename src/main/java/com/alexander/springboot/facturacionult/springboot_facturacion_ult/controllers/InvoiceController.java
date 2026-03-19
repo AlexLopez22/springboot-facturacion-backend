@@ -24,13 +24,13 @@ public class InvoiceController {
     public ResponseEntity<List<InvoiceListDTO>> listInvoicesTable(
             @RequestParam(required = false) String fechaInicio,
             @RequestParam(required = false) String fechaFin,
-            @RequestParam(required = false) String tipoComprobante,
+            @RequestParam(required = false) String tipoDocumento,
             @RequestParam(required = false) String serie,
             @RequestParam(required = false) String correlativo,
             @RequestParam(required = false) Long clienteId) {
 
         return ResponseEntity.ok(
-                invoiceService.listInvoicesTable(fechaInicio, fechaFin, tipoComprobante, serie, correlativo,
+                invoiceService.listInvoicesTable(fechaInicio, fechaFin, tipoDocumento, serie, correlativo,
                         clienteId));
     }
 

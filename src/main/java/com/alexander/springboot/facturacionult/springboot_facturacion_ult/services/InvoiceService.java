@@ -40,7 +40,7 @@ public class InvoiceService {
 public List<InvoiceListDTO> listInvoicesTable(
         String fechaInicio,
         String fechaFin,
-        String tipoComprobante,
+        String tipoDocumento,
         String serie,
         String correlativo,
         Long clienteId) {
@@ -52,13 +52,13 @@ public List<InvoiceListDTO> listInvoicesTable(
                     LocalDate inicio = LocalDate.parse(fechaInicio);
                     LocalDate fin = LocalDate.parse(fechaFin);
 
-                    LocalDate fechaInv = inv.getFechaEmision(); // ✅ ya es LocalDate
+                    LocalDate fechaInv = inv.getFechaEmision(); 
                     fechaOk = !fechaInv.isBefore(inicio) && !fechaInv.isAfter(fin);
                 }
 
-                boolean tipoOk = tipoComprobante == null ||
+                boolean tipoOk = tipoDocumento == null ||
                         (inv.getTipoDocumento() != null
-                                && tipoComprobante.equals(inv.getTipoDocumento().getNombre()));
+                                && tipoDocumento.equals(inv.getTipoDocumento().getNombre()));
 
                 boolean serieOk = serie == null ||
                         (inv.getSerie() != null && serie.equalsIgnoreCase(inv.getSerie().getNombreSerie()));
