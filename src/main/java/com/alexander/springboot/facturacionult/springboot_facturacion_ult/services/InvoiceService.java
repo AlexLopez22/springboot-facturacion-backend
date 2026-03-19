@@ -35,8 +35,35 @@ public class InvoiceService {
     }
 
     @Transactional(readOnly = true)
-    public List<InvoiceListDTO> listInvoicesTable() {
+    public List<InvoiceListDTO> listInvoicesTable(
+            String fechaInicio,
+            String fechaFin,
+            String tipoComprobante,
+            String serie,
+            String correlativo,
+            Long clienteId) {
         return invoiceRepository.findAll().stream()
+                .filter(inv -> {
+                    boolean fechaOk = true;
+                    if (fechaInicio != null && fechaFin != null && inv.getFechaEmision() != null) {
+                        fechaOk = !inv.getFechaEmision().isBefore(LocalDate.parse(fechaInicio))
+                                && !inv.getFechaEmision().isAfter(LocalDate.parse(fechaFin));
+                    }
+
+                    boolean tipoOk = tipoComprobante == null ||
+                            (inv.getTipoDocumento() != null
+                                    && tipoComprobante.equals(inv.getTipoDocumento().getNombre()));
+
+                    boolean serieOk = serie == null ||
+                            (inv.getSerie() != null && serie.equalsIgnoreCase(inv.getSerie().getNombreSerie()));
+
+                    boolean correlativoOk = correlativo == null || correlativo.equals(inv.getNumero());
+
+                    boolean clienteOk = clienteId == null ||
+                            (inv.getCliente() != null && clienteId.equals(inv.getCliente().getId()));
+
+                    return fechaOk && tipoOk && serieOk && correlativoOk && clienteOk;
+                })
                 .map(inv -> {
                     String numeroDoc = inv.getCliente() != null ? inv.getCliente().getNumeroDocumento() : "";
                     String nombreCliente = inv.getCliente() != null ? inv.getCliente().getRazonSocial() : "";
@@ -51,7 +78,8 @@ public class InvoiceService {
                             inv.getSerie() != null ? inv.getSerie().getNombreSerie() : "",
                             inv.getNumero(),
                             numeroDoc, nombreCliente, igv, total, estado, pdf);
-                }).toList();
+                })
+                .toList();
     }
 
     // Obtener factura completa por ID

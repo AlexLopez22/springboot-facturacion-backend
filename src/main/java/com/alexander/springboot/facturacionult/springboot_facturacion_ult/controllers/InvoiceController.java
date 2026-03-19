@@ -21,8 +21,16 @@ public class InvoiceController {
     }
 
     @GetMapping("/list-invoices")
-    public ResponseEntity<List<InvoiceListDTO>> listInvoicesTable() {
-        return ResponseEntity.ok(invoiceService.listInvoicesTable());
+    public ResponseEntity<List<InvoiceListDTO>> listInvoicesTable(@RequestParam(required = false) String fechaInicio,
+            @RequestParam(required = false) String fechaFin,
+            @RequestParam(required = false) String tipoComprobante,
+            @RequestParam(required = false) String serie,
+            @RequestParam(required = false) String correlativo,
+            @RequestParam(required = false) Long clienteId) {
+
+        return ResponseEntity.ok(
+                invoiceService.listInvoicesTable(fechaInicio, fechaFin, tipoComprobante, serie, correlativo,
+                        clienteId));
     }
 
     @GetMapping("/list-invoices/{id}")
