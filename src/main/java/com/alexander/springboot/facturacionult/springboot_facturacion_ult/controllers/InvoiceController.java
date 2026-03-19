@@ -21,7 +21,8 @@ public class InvoiceController {
     }
 
     @GetMapping("/list-invoices")
-    public ResponseEntity<List<InvoiceListDTO>> listInvoicesTable(@RequestParam(required = false) String fechaInicio,
+    public ResponseEntity<List<InvoiceListDTO>> listInvoicesTable(
+            @RequestParam(required = false) String fechaInicio,
             @RequestParam(required = false) String fechaFin,
             @RequestParam(required = false) String tipoComprobante,
             @RequestParam(required = false) String serie,

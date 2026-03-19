@@ -13,6 +13,8 @@ import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.*
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.entities.*;
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.repositories.*;
 
+import java.util.Date;
+
 @Service
 public class InvoiceService {
 
@@ -34,53 +36,57 @@ public class InvoiceService {
         this.documentRepository = documentRepository;
     }
 
-    @Transactional(readOnly = true)
-    public List<InvoiceListDTO> listInvoicesTable(
-            String fechaInicio,
-            String fechaFin,
-            String tipoComprobante,
-            String serie,
-            String correlativo,
-            Long clienteId) {
-        return invoiceRepository.findAll().stream()
-                .filter(inv -> {
-                    boolean fechaOk = true;
-                    if (fechaInicio != null && fechaFin != null && inv.getFechaEmision() != null) {
-                        fechaOk = !inv.getFechaEmision().isBefore(LocalDate.parse(fechaInicio))
-                                && !inv.getFechaEmision().isAfter(LocalDate.parse(fechaFin));
-                    }
+@Transactional(readOnly = true)
+public List<InvoiceListDTO> listInvoicesTable(
+        String fechaInicio,
+        String fechaFin,
+        String tipoComprobante,
+        String serie,
+        String correlativo,
+        Long clienteId) {
 
-                    boolean tipoOk = tipoComprobante == null ||
-                            (inv.getTipoDocumento() != null
-                                    && tipoComprobante.equals(inv.getTipoDocumento().getNombre()));
+    return invoiceRepository.findAll().stream()
+            .filter(inv -> {
+                boolean fechaOk = true;
+                if (fechaInicio != null && fechaFin != null && inv.getFechaEmision() != null) {
+                    LocalDate inicio = LocalDate.parse(fechaInicio);
+                    LocalDate fin = LocalDate.parse(fechaFin);
 
-                    boolean serieOk = serie == null ||
-                            (inv.getSerie() != null && serie.equalsIgnoreCase(inv.getSerie().getNombreSerie()));
+                    LocalDate fechaInv = inv.getFechaEmision(); // ✅ ya es LocalDate
+                    fechaOk = !fechaInv.isBefore(inicio) && !fechaInv.isAfter(fin);
+                }
 
-                    boolean correlativoOk = correlativo == null || correlativo.equals(inv.getNumero());
+                boolean tipoOk = tipoComprobante == null ||
+                        (inv.getTipoDocumento() != null
+                                && tipoComprobante.equals(inv.getTipoDocumento().getNombre()));
 
-                    boolean clienteOk = clienteId == null ||
-                            (inv.getCliente() != null && clienteId.equals(inv.getCliente().getId()));
+                boolean serieOk = serie == null ||
+                        (inv.getSerie() != null && serie.equalsIgnoreCase(inv.getSerie().getNombreSerie()));
 
-                    return fechaOk && tipoOk && serieOk && correlativoOk && clienteOk;
-                })
-                .map(inv -> {
-                    String numeroDoc = inv.getCliente() != null ? inv.getCliente().getNumeroDocumento() : "";
-                    String nombreCliente = inv.getCliente() != null ? inv.getCliente().getRazonSocial() : "";
-                    BigDecimal igv = inv.getTotales() != null ? inv.getTotales().getIgv() : BigDecimal.ZERO;
-                    BigDecimal total = inv.getTotales() != null ? inv.getTotales().getImporteTotal() : BigDecimal.ZERO;
-                    String estado = inv.getSunat() != null ? inv.getSunat().getEstado() : "PENDIENTE";
-                    byte[] pdf = inv.getSunat() != null ? inv.getSunat().getCdr() : null;
-                    return new InvoiceListDTO(
-                            inv.getId(),
-                            inv.getFechaEmision() != null ? inv.getFechaEmision().toString() : "",
-                            inv.getTipoDocumento() != null ? inv.getTipoDocumento().getNombre() : "",
-                            inv.getSerie() != null ? inv.getSerie().getNombreSerie() : "",
-                            inv.getNumero(),
-                            numeroDoc, nombreCliente, igv, total, estado, pdf);
-                })
-                .toList();
-    }
+                boolean correlativoOk = correlativo == null || correlativo.equals(inv.getNumero());
+
+                boolean clienteOk = clienteId == null ||
+                        (inv.getCliente() != null && clienteId.equals(inv.getCliente().getId()));
+
+                return fechaOk && tipoOk && serieOk && correlativoOk && clienteOk;
+            })
+            .map(inv -> {
+                String numeroDoc = inv.getCliente() != null ? inv.getCliente().getNumeroDocumento() : "";
+                String nombreCliente = inv.getCliente() != null ? inv.getCliente().getRazonSocial() : "";
+                BigDecimal igv = inv.getTotales() != null ? inv.getTotales().getIgv() : BigDecimal.ZERO;
+                BigDecimal total = inv.getTotales() != null ? inv.getTotales().getImporteTotal() : BigDecimal.ZERO;
+                String estado = inv.getSunat() != null ? inv.getSunat().getEstado() : "PENDIENTE";
+                byte[] pdf = inv.getSunat() != null ? inv.getSunat().getCdr() : null;
+                return new InvoiceListDTO(
+                        inv.getId(),
+                        inv.getFechaEmision() != null ? inv.getFechaEmision().toString() : "",
+                        inv.getTipoDocumento() != null ? inv.getTipoDocumento().getNombre() : "",
+                        inv.getSerie() != null ? inv.getSerie().getNombreSerie() : "",
+                        inv.getNumero(),
+                        numeroDoc, nombreCliente, igv, total, estado, pdf);
+            })
+            .toList();
+}
 
     // Obtener factura completa por ID
     @Transactional(readOnly = true)
