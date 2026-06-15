@@ -4,9 +4,14 @@ import java.math.BigDecimal;
 import java.time.*;
 import java.util.List;
 
+import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.alexander.springboot.facturacionult.springboot_facturacion_ult.dtos.*;
@@ -233,5 +238,90 @@ public List<InvoiceListDTO> listInvoicesTable(
                 .map(inv -> Integer.parseInt(inv.getNumero()) + 1)
                 .orElse(1);
     }
+    
+    public ClientDTO consultarDatosReniec(String dni) {
 
+        String url = "https://api.apis.net.pe/v1/dni?numero=" + dni;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Error consultando RENIEC");
+        }
+
+        JSONObject json = new JSONObject(response.getBody());
+
+        String nombres = json.optString("nombres");
+        String apePat = json.optString("apellidoPaterno");
+        String apeMat = json.optString("apellidoMaterno");
+
+        String nombreCompleto = (nombres + " " + apePat + " " + apeMat).trim();
+
+        ClientDTO dto = new ClientDTO();
+        dto.setTipoDocumento("1");
+        dto.setNumeroDocumento(dni);
+        dto.setRazonSocial(nombreCompleto);
+
+        return dto;
+    }
+
+    public ClientDTO consultarDatosSunat(String ruc) {
+
+        String url = "https://api.apis.net.pe/v1/ruc?numero=" + ruc;
+        String token = "TU_TOKEN_REAL";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+       // HttpHeaders headers = new HttpHeaders();
+       // headers.set("Authorization", "Bearer " + token);
+
+     //   HttpEntity<String> entity = new HttpEntity<>(headers);
+
+       // ResponseEntity<String> response = restTemplate.exchange(
+         //       url,
+           //     HttpMethod.GET,
+             //   null,
+               // String.class);
+
+       // if (response.getStatusCode() != HttpStatus.OK) {
+         //   throw new RuntimeException("Error consultando SUNAT");
+       // }
+
+        //JSONObject json = new JSONObject(response.getBody());
+
+        ClientDTO dto = new ClientDTO();
+        dto.setTipoDocumento("6");
+        return dto;
+    }
+
+    public ClientDTO guardar(ClientDTO dto) {
+
+        Client client = new Client();
+
+        client.setTipoDocumento(dto.getTipoDocumento());
+        client.setNumeroDocumento(dto.getNumeroDocumento());
+        client.setRazonSocial(dto.getRazonSocial());
+
+        // 📍 Dirección
+        if (dto.getDireccion() != null) {
+            Address address = new Address();
+            address.setDireccionCompleta(dto.getDireccion().getDireccionCompleta());
+            client.setDireccion(address);
+        }
+
+        // 📍 Campos SUNAT opcionales
+        client.setEstado(dto.getEstado());
+        client.setCondicion(dto.getCondicion());
+        client.setUbigeo(dto.getUbigeo());
+        client.setViaTipo(dto.getViaTipo());
+        client.setViaNombre(dto.getViaNombre());
+        client.setZonaTipo(dto.getZonaTipo());
+
+        Client saved = clientRepository.save(client);
+
+        return new ClientDTO(saved);
+    }
 }
+

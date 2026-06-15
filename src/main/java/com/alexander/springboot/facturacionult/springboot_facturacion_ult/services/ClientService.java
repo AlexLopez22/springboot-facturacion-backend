@@ -34,108 +34,109 @@ public class ClientService {
     public Optional<ClientDTO> listClientById(Long id) {
         return clientRepository.findById(id).map(this::mapToDTO);
     }
+
     // Convierte la entidad Client en un DTO para enviar datos seguros al frontend
     private ClientDTO mapToDTO(Client client) {
-        return new ClientDTO(client); 
+        return new ClientDTO(client);
     }
 
     public ClientDTO consultarDatosReniec(String dni) {
 
-    String url = "https://api.apis.net.pe/v1/dni?numero=" + dni;
+        String url = "https://api.apis.net.pe/v1/dni?numero=" + dni;
 
-    RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
 
-    ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-    if (response.getStatusCode() != HttpStatus.OK) {
-        throw new RuntimeException("Error consultando RENIEC");
-    }
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Error consultando RENIEC");
+        }
 
-    JSONObject json = new JSONObject(response.getBody());
+        JSONObject json = new JSONObject(response.getBody());
 
-    String nombres = json.optString("nombres");
-    String apePat = json.optString("apellidoPaterno");
-    String apeMat = json.optString("apellidoMaterno");
+        String nombres = json.optString("nombres");
+        String apePat = json.optString("apellidoPaterno");
+        String apeMat = json.optString("apellidoMaterno");
 
-    String nombreCompleto = (nombres + " " + apePat + " " + apeMat).trim();
+        String nombreCompleto = (nombres + " " + apePat + " " + apeMat).trim();
 
-    ClientDTO dto = new ClientDTO();
-    dto.setTipoDocumento("1");
-    dto.setNumeroDocumento(dni);
-    dto.setRazonSocial(nombreCompleto);
+        ClientDTO dto = new ClientDTO();
+        dto.setTipoDocumento("1");
+        dto.setNumeroDocumento(dni);
+        dto.setRazonSocial(nombreCompleto);
 
-    return dto;
+        return dto;
     }
 
     public ClientDTO consultarDatosSunat(String ruc) {
 
-    String url = "https://api.apis.net.pe/v1/ruc?numero=" + ruc;
-    String token = "TU_TOKEN_REAL";
+        String url = "https://api.apis.net.pe/v1/ruc?numero=" + ruc;
+        String token = "TU_TOKEN_REAL";
 
-    RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", "Bearer " + token);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
 
-    HttpEntity<String> entity = new HttpEntity<>(headers);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
 
-    ResponseEntity<String> response = restTemplate.exchange(
-            url,
-            HttpMethod.GET,
-            entity,
-            String.class
-    );
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                String.class);
 
-    if (response.getStatusCode() != HttpStatus.OK) {
-        throw new RuntimeException("Error consultando SUNAT");
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Error consultando SUNAT");
+        }
+
+        JSONObject json = new JSONObject(response.getBody());
+
+        ClientDTO dto = new ClientDTO();
+        dto.setTipoDocumento("6");
+        dto.setNumeroDocumento(ruc);
+
+        dto.setRazonSocial(json.optString("nombre"));
+        dto.setEstado(json.optString("estado"));
+        dto.setCondicion(json.optString("condicion"));
+        dto.setUbigeo(json.optString("ubigeo"));
+        dto.setViaTipo(json.optString("viaTipo"));
+        dto.setViaNombre(json.optString("viaNombre"));
+        dto.setZonaTipo(json.optString("zonaTipo"));
+        dto.setNombre(json.optString("zonaNombre")); // o nombre comercial según tu DTO
+
+        AddressDTO address = new AddressDTO();
+        address.setDireccionCompleta(json.optString("direccion"));
+        dto.setDireccion(address);
+
+        return dto;
     }
 
-    JSONObject json = new JSONObject(response.getBody());
-
-    ClientDTO dto = new ClientDTO();
-    dto.setTipoDocumento("6");
-    dto.setNumeroDocumento(ruc);
-
-    dto.setRazonSocial(json.optString("nombre"));
-    dto.setEstado(json.optString("estado"));
-    dto.setCondicion(json.optString("condicion"));
-    dto.setUbigeo(json.optString("ubigeo"));
-    dto.setViaTipo(json.optString("viaTipo"));
-    dto.setViaNombre(json.optString("viaNombre"));
-    dto.setZonaTipo(json.optString("zonaTipo"));
-    dto.setNombre(json.optString("zonaNombre")); // o nombre comercial según tu DTO
-
-    AddressDTO address = new AddressDTO();
-    address.setDireccionCompleta(json.optString("direccion"));
-    dto.setDireccion(address);
-
-    return dto;
-}
     public ClientDTO guardar(ClientDTO dto) {
 
-    Client client = new Client();
+        Client client = new Client();
 
-    client.setTipoDocumento(dto.getTipoDocumento());
-    client.setNumeroDocumento(dto.getNumeroDocumento());
-    client.setRazonSocial(dto.getRazonSocial());
+        client.setTipoDocumento(dto.getTipoDocumento());
+        client.setNumeroDocumento(dto.getNumeroDocumento());
+        client.setRazonSocial(dto.getRazonSocial());
 
-    // 📍 Dirección
-    if (dto.getDireccion() != null) {
-        Address address = new Address();
-        address.setDireccionCompleta(dto.getDireccion().getDireccionCompleta());
-        client.setDireccion(address);
+        // 📍 Dirección
+        if (dto.getDireccion() != null) {
+            Address address = new Address();
+            address.setDireccionCompleta(dto.getDireccion().getDireccionCompleta());
+            client.setDireccion(address);
+        }
+
+        // 📍 Campos SUNAT opcionales
+        client.setEstado(dto.getEstado());
+        client.setCondicion(dto.getCondicion());
+        client.setUbigeo(dto.getUbigeo());
+        client.setViaTipo(dto.getViaTipo());
+        client.setViaNombre(dto.getViaNombre());
+        client.setZonaTipo(dto.getZonaTipo());
+
+        Client saved = clientRepository.save(client);
+
+        return new ClientDTO(saved);
     }
-
-    // 📍 Campos SUNAT opcionales
-    client.setEstado(dto.getEstado());
-    client.setCondicion(dto.getCondicion());
-    client.setUbigeo(dto.getUbigeo());
-    client.setViaTipo(dto.getViaTipo());
-    client.setViaNombre(dto.getViaNombre());
-    client.setZonaTipo(dto.getZonaTipo());
-
-    Client saved = clientRepository.save(client);
-
-    return new ClientDTO(saved);
-}
 }
